@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnCloud33</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#211f1a;
+    --cream:#f6f1e6;
+    --indigo:#1c2a45;
+    --indigo-deep:#131c30;
+    --saffron:#e08a3c;
+    --green:#2c5c49;
+    --line: rgba(33,31,26,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--saffron);
+  }
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,241,230,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:1080px; margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif; font-weight:600; font-size:19px;
+  }
+  .brand .mark{
+    width:26px; height:26px; border-radius:50%;
+    background: conic-gradient(var(--saffron) 0deg 90deg, var(--green) 90deg 180deg, var(--indigo) 180deg 270deg, var(--saffron) 270deg 360deg);
+  }
+
+  /* Brand lockup matching the OnCloud33 logo: icon bars + stacked wordmark */
+  .brand-lockup{ display:flex; align-items:center; gap:12px; }
+  .brand-icon{ display:flex; flex-direction:column; gap:3px; flex-shrink:0; }
+  .brand-icon .bar{ height:5px; border-radius:1px; }
+  .brand-icon .bar.b1{ width:14px; background:#bfe3f5; }
+  .brand-icon .bar.b2{ width:20px; background:#eda93a; }
+  .brand-icon .bar.b3{ width:26px; background:#3fb6d3; }
+  .brand-icon .bar.b4{ width:32px; background:#eda93a; }
+  .brand-text{ display:flex; flex-direction:column; line-height:1.05; }
+  .brand-text .l-urbanrise{
+    font-family:'Inter', sans-serif; font-weight:400; font-size:11px;
+    letter-spacing:0.03em; color:var(--ink); opacity:0.65;
+  }
+  .brand-text .l-oncloud{
+    font-family:'Fraunces', serif; font-weight:700; font-size:26px;
+    letter-spacing:-0.01em; color:var(--ink); margin-top:1px;
+  }
+  .brand-text .l-bachupally{
+    font-family:'JetBrains Mono', monospace; font-size:9.5px;
+    letter-spacing:0.16em; color:var(--ink); opacity:0.65; margin-top:3px;
+  }
+  .brand-text .l-tagline{
+    font-family:'Fraunces', serif; font-style:italic; font-size:10.5px;
+    color:var(--ink); opacity:0.55; margin-top:1px;
+  }
+  .brand-lockup.footer-lockup .l-oncloud{ font-size:24px; }
+
+  /* HERO */
+  .hero{
+    padding:96px 28px 80px;
+    background:
+      radial-gradient(circle at 82% 15%, rgba(224,138,60,0.16), transparent 45%),
+      radial-gradient(circle at 10% 90%, rgba(44,92,73,0.14), transparent 45%);
+  }
+  .hero-inner{max-width:1080px; margin:0 auto;}
+  .hero h1{
+    font-size:clamp(38px, 6vw, 62px);
+    max-width:780px;
+    margin-top:14px;
+  }
+  .hero p{
+    max-width:540px;
+    margin-top:20px;
+    font-size:17px;
+    color:rgba(33,31,26,0.75);
+  }
+  .hero-cta{
+    margin-top:34px; display:flex; gap:16px; flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 22px;
+    border-radius:3px;
+    font-weight:600; font-size:14.5px;
+    text-decoration:none; cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease;
+    font-family:'Inter', sans-serif;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--indigo); color:var(--cream);}
+  .btn-primary:hover{box-shadow:0 8px 18px rgba(28,42,69,0.28);}
+  .btn-ghost{background:transparent; border-color:var(--ink); color:var(--ink);}
+  .btn-disabled{
+    opacity:0.45; cursor:not-allowed; user-select:none;
+  }
+  .btn-disabled:hover{transform:none;}
+
+  /* PILLARS */
+  .pillars{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:48px 28px;
+  }
+  .pillars-inner{
+    max-width:1080px; margin:0 auto;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:32px;
+  }
+  .pillar .num{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--green);}
+  .pillar h3{font-size:19px; margin-top:8px;}
+  .pillar p{font-size:14.5px; color:rgba(33,31,26,0.7); margin-top:6px;}
+
+  /* EVENTS */
+  .events{padding:96px 28px;}
+  .events-head{max-width:640px; margin-bottom:48px;}
+  .events-head h2{font-size:clamp(30px,4vw,40px); margin-top:10px;}
+  .events-grid{
+    display:grid; grid-template-columns:1.3fr 1fr; gap:24px;
+  }
+  .event-card{
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:#fffdf8;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .event-featured{
+    grid-row: span 2;
+    background:var(--indigo-deep);
+    color:var(--cream);
+    border-color:transparent;
+    position:relative;
+  }
+  .ring-wrap{
+    position:absolute; top:28px; right:28px;
+    width:86px; height:86px;
+  }
+  .ring{
+    width:100%; height:100%; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .ring-inner{
+    width:64px; height:64px; border-radius:50%;
+    background:var(--indigo-deep);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .ring-inner .d{font-size:19px; font-weight:600; line-height:1;}
+  .ring-inner .lbl{font-size:8.5px; letter-spacing:0.08em; opacity:0.7; margin-top:2px;}
+  .event-featured .body{padding:34px 30px 30px; display:flex; flex-direction:column; height:100%;}
+  .event-featured .eyebrow{color:var(--saffron);}
+  .event-featured h3{font-size:30px; margin-top:12px; max-width:70%;}
+  .event-featured .meta{
+    margin-top:16px; font-size:14px; opacity:0.8;
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  .event-featured p.desc{margin-top:18px; font-size:14.5px; opacity:0.85; max-width:420px;}
+  .event-featured .btn-primary{
+    margin-top:auto; padding-top:0; align-self:flex-start; margin-top:26px;
+    background:var(--saffron); color:var(--indigo-deep);
+  }
+  .event-featured .btn-primary:hover{box-shadow:0 8px 18px rgba(224,138,60,0.3);}
+
+  .event-card.small{padding:26px;}
+  .event-card.small h3{font-size:19px; margin-top:10px;}
+  .event-card.small .meta{
+    margin-top:10px; font-size:13px; color:rgba(33,31,26,0.65);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .event-card.small p{margin-top:12px; font-size:14px; color:rgba(33,31,26,0.72);}
+  .event-card.small .link{
+    margin-top:16px; font-size:13.5px; font-weight:600; color:var(--green);
+    text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .event-card.small .link-static{
+    margin-top:16px; font-size:13px; font-weight:500; color:rgba(33,31,26,0.55);
+    font-style:italic; display:inline-block;
+  }
+
+  /* FOOTER */
+  footer{
+    border-top:1px solid var(--line);
+    padding:48px 28px;
+    font-size:13.5px;
+    color:rgba(33,31,26,0.65);
+  }
+  .footer-inner{
+    max-width:1080px; margin:0 auto;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  }
+
+  /* MODAL */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(19,28,48,0.55);
+    display:none; align-items:center; justify-content:center;
+    padding:20px; z-index:100;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal{
+    background:var(--cream); border-radius:5px;
+    max-width:460px; width:100%;
+    max-height:88vh; overflow-y:auto;
+    padding:34px;
+    position:relative;
+    animation: rise .25s ease;
+  }
+  .modal.modal-wide{max-width:600px;}
+  .btn-small{padding:8px 14px; font-size:13px;}
+  .participants-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:6px;
+  }
+  .hint{font-size:12.5px; color:rgba(33,31,26,0.6); margin-top:-6px; margin-bottom:4px;}
+  .participant-card{
+    border:1px solid var(--line); border-radius:5px;
+    padding:16px; margin-top:12px;
+    background:#fffdf8;
+  }
+  .participant-card-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .participant-card-head .eyebrow{color:var(--green);}
+  .remove-participant{
+    background:none; border:none; color:#b3402a;
+    font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:underline;
+  }
+  .sports-list{margin-top:8px; display:flex; flex-wrap:wrap; gap:4px 18px;}
+  .sports-list .check{padding:3px 0;}
+  .sports-empty{font-size:13px; color:rgba(33,31,26,0.55); margin-top:8px;}
+  .field-row{
+    display:grid; grid-template-columns:1fr 1fr; gap:14px;
+  }
+  .field-row > div{margin:0;}
+  fieldset.sport-group{
+    border:1px solid var(--line); border-radius:4px;
+    padding:12px 14px 14px; margin-top:10px;
+  }
+  fieldset.sport-group legend{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--green); padding:0 6px;
+  }
+  label.check{
+    display:flex; align-items:center; gap:8px;
+    font-size:14px; font-weight:400;
+    padding:5px 0;
+    cursor:pointer;
+  }
+  label.check input{width:auto; margin:0;}
+  @media (max-width:520px){
+    .field-row{grid-template-columns:1fr;}
+  }
+  @keyframes rise{from{transform:translateY(14px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+  .modal-close{
+    position:absolute; top:18px; right:18px;
+    background:none; border:none; font-size:20px; cursor:pointer; color:var(--ink);
+    line-height:1;
+  }
+  .modal h3{font-size:24px; margin-top:6px;}
+  .modal .sub{font-size:13.5px; color:rgba(33,31,26,0.65); margin-top:8px;}
+  form{margin-top:22px; display:flex; flex-direction:column; gap:14px;}
+  label{font-size:13px; font-weight:600; display:block; margin-bottom:6px;}
+  input, select, textarea{
+    width:100%; padding:11px 12px;
+    border:1px solid var(--line); border-radius:3px;
+    background:#fffdf8; font-family:'Inter',sans-serif; font-size:14px;
+    color:var(--ink);
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:2px solid var(--indigo); outline-offset:1px;
+  }
+  textarea{resize:vertical; min-height:64px;}
+  .submit-row{margin-top:6px;}
+  .submit-row .btn{width:100%; justify-content:center;}
+  .success{
+    display:none; text-align:center; padding:20px 0;
+  }
+  .success.show{display:block;}
+  .success .check{
+    width:48px; height:48px; border-radius:50%; background:var(--green);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:22px; margin:0 auto 16px;
+  }
+  .success h3{font-size:20px;}
+  .success p{font-size:14px; color:rgba(33,31,26,0.7); margin-top:8px;}
+
+  @media (max-width:760px){
+    .pillars-inner{grid-template-columns:1fr; gap:28px;}
+    .events-grid{grid-template-columns:1fr;}
+    .event-featured{grid-row:auto;}
+    .ring-wrap{position:static; margin-bottom:16px;}
+    .event-featured h3{max-width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand-lockup">
+      <div class="brand-icon">
+        <span class="bar b1"></span>
+        <span class="bar b2"></span>
+        <span class="bar b3"></span>
+        <span class="bar b4"></span>
+      </div>
+      <div class="brand-text">
+        <span class="l-urbanrise">urbanrise</span>
+        <span class="l-oncloud">On Cloud 33</span>
+        <span class="l-bachupally">BACHUPALLY</span>
+        <span class="l-tagline">Endless Everything</span>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">OnCloud33 Volunteers Committee</div>
+    <h1>A neighborhood that shows up for each other.</h1>
+    <p>We're the residents, shopkeepers, teachers, and families of OnCloud33 — organizing the gatherings, drives, and celebrations that make this place feel like home.</p>
+    <div class="hero-cta">
+      <a href="#events" class="btn btn-primary">Browse events</a>
+      <span class="btn btn-ghost btn-disabled">Our story — under construction</span>
+    </div>
+  </div>
+</section>
+
+<section class="pillars" id="about">
+  <div class="pillars-inner">
+    <div class="pillar">
+      <div class="num">01</div>
+      <h3>Open to everyone</h3>
+      <p>Every household in the ward is a member — no fees, no gatekeeping.</p>
+    </div>
+    <div class="pillar">
+      <div class="num">02</div>
+      <h3>Run by neighbors</h3>
+      <p>Every event on this page is planned and hosted by neighbors, not staff.</p>
+    </div>
+    <div class="pillar">
+      <div class="num">03</div>
+      <h3>12 gatherings a year</h3>
+      <p>From festival celebrations to national holidays, there's a reason to meet monthly.</p>
+    </div>
+  </div>
+</section>
+
+<section class="events" id="events">
+  <div class="wrap">
+    <div class="events-head">
+      <div class="eyebrow">Upcoming</div>
+      <h2>Community events</h2>
+    </div>
+
+    <div class="events-grid">
+      <!-- Featured: Independence Day -->
+      <div class="event-card event-featured">
+        <div class="ring-wrap">
+          <div class="ring" id="countdownRing">
+            <div class="ring-inner">
+              <span class="d" id="daysLeft">--</span>
+              <span class="lbl">DAYS</span>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="eyebrow">Featured event</div>
+          <h3>Independence Day Celebration</h3>
+          <div class="meta">
+            <span>📅 Saturday, 15 August 2026</span>
+            <span>📍 OnCloud33 Clubhouse Ground Floor</span>
+          </div>
+          <p class="desc">Flag hoisting at 9:00 AM, a children's cultural program, food stalls run by the volunteer committee, and an evening lamp-lighting ceremony. Bring the whole household.</p>
+          <a class="btn btn-primary" href="https://forms.gle/EH6hMPe1ReZC9Wsy5" target="_blank" rel="noopener">Register for the event</a>
+        </div>
+      </div>
+
+      <div class="event-card small">
+        <div class="eyebrow">Festival</div>
+        <h3>Vinayaka Chaturthi</h3>
+        <div class="meta">MON · 14 SEP · Ganesh sthapana & aarti</div>
+        <p>Ganesha idol installation at the clubhouse, morning and evening aarti through the festival, and community visarjan to close.</p>
+        <span class="link-static">Keep monitoring this for updates</span>
+      </div>
+
+      <div class="event-card small">
+        <div class="eyebrow">Festival</div>
+        <h3>Navaratri & Dussehra</h3>
+        <div class="meta">11–20 OCT · 10 Days of Puja</div>
+        <p>Ten days of daily puja to Maa at the clubhouse, with a different avataram of the Goddess honored each day, closing with visarjan on Dussehra.</p>
+        <span class="link-static">Keep monitoring this for updates</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-inner">
+    <div>
+      <div class="brand-lockup footer-lockup" style="margin-bottom:12px;">
+        <div class="brand-icon">
+          <span class="bar b1"></span>
+          <span class="bar b2"></span>
+          <span class="bar b3"></span>
+          <span class="bar b4"></span>
+        </div>
+        <div class="brand-text">
+          <span class="l-urbanrise">urbanrise</span>
+          <span class="l-oncloud">On Cloud 33</span>
+          <span class="l-bachupally">BACHUPALLY</span>
+          <span class="l-tagline">Endless Everything</span>
+        </div>
+      </div>
+      <div>OnCloud33 Clubhouse Ground</div>
+    </div>
+    <div>
+      <div>OnCloud33 Volunteer Committee</div>
+    </div>
+    <div>
+      <span style="opacity:0.7;">Organizers: registration data is in the linked Google Sheet (share access from Google Forms → Responses).</span>
+    </div>
+  </div>
+</footer>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+    <div id="formView">
+      <div class="eyebrow">Independence Day · 15 August 2026</div>
+      <h3>Register for the event</h3>
+      <p class="sub">One submission per flat — add every family member taking part, then pick each person's events below.</p>
+      <form id="regForm">
+        <div class="field-row">
+          <div>
+            <label for="ftower">Tower / Block</label>
+            <input type="text" id="ftower" required placeholder="e.g. Tower 3">
+          </div>
+          <div>
+            <label for="fflat">Flat number</label>
+            <input type="text" id="fflat" required placeholder="e.g. 1204">
+          </div>
+        </div>
+
+        <div>
+          <label for="fcontact">Primary contact name</label>
+          <input type="text" id="fcontact" required placeholder="Whoever we should reach first">
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="femail">Email</label>
+            <input type="email" id="femail" required placeholder="you@example.com">
+          </div>
+          <div>
+            <label for="fphone">Phone number</label>
+            <input type="tel" id="fphone" required placeholder="+1 555 010 2200">
+          </div>
+        </div>
+
+        <div class="participants-head">
+          <label style="margin:0;">Participants</label>
+          <button type="button" class="btn btn-ghost btn-small" onclick="addParticipant()">+ Add participant</button>
+        </div>
+        <p class="hint">Add one entry per person. Sport events shown for each person are based on their age group.</p>
+
+        <div id="participantsContainer"></div>
+
+        <div>
+          <label for="fnote">Anything we should know? (optional)</label>
+          <textarea id="fnote" placeholder="Dietary needs, accessibility, volunteering..."></textarea>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary">Confirm registration</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="success" id="successView">
+      <div class="check">✓</div>
+      <h3 style="text-align:center;">You're registered</h3>
+      <p style="text-align:center;" id="successMsg">See you at the Independence Day celebration.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN / SPREADSHEET VIEW -->
+<div class="modal-backdrop" id="adminBackdrop">
+  <div class="modal" style="max-width:920px;">
+    <button class="modal-close" onclick="closeAdmin()" aria-label="Close">✕</button>
+
+    <div id="adminGate">
+      <div class="eyebrow">Organizers only</div>
+      <h3>Enter password</h3>
+      <p class="sub">This area holds everyone's contact details — please don't share the password.</p>
+      <form id="gateForm" style="margin-top:20px;">
+        <div>
+          <label for="adminPass">Password</label>
+          <input type="password" id="adminPass" required placeholder="Enter password">
+        </div>
+        <p id="gateError" style="display:none; color:#b3402a; font-size:13px; margin-top:-6px;">Incorrect password. Try again.</p>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary">Unlock</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="adminContent" style="display:none;">
+      <div class="eyebrow">Organizers only</div>
+      <h3>Independence Day registrations</h3>
+      <p class="sub">Everyone who has registered so far.</p>
+      <div style="margin-top:18px; overflow-x:auto;">
+        <table id="regTable" style="width:100%; border-collapse:collapse; font-size:13.5px;">
+          <thead>
+            <tr style="text-align:left; border-bottom:1px solid var(--line);">
+              <th style="padding:8px 6px;">Tower</th>
+              <th style="padding:8px 6px;">Flat</th>
+              <th style="padding:8px 6px;">Participant</th>
+              <th style="padding:8px 6px;">Gender</th>
+              <th style="padding:8px 6px;">Age</th>
+              <th style="padding:8px 6px;">Sport events</th>
+              <th style="padding:8px 6px;">Contact name</th>
+              <th style="padding:8px 6px;">Phone</th>
+              <th style="padding:8px 6px;">Email</th>
+              <th style="padding:8px 6px;">Note</th>
+            </tr>
+          </thead>
+          <tbody id="regTableBody"></tbody>
+        </table>
+        <p id="regEmpty" style="display:none; font-size:13.5px; color:rgba(33,31,26,0.6); padding:16px 0;">No registrations yet.</p>
+      </div>
+      <div class="submit-row" style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="downloadCSV()">Download as spreadsheet (CSV)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Countdown to Independence Day event
+  function updateCountdown(){
+    const target = new Date('2026-08-15T00:00:00');
+    const now = new Date();
+    const diff = Math.ceil((target - now) / (1000*60*60*24));
+    const days = diff > 0 ? diff : 0;
+    document.getElementById('daysLeft').textContent = days;
+    const pct = Math.max(0, Math.min(1, 1 - (days / 60))); // fills as date nears
+    const deg = pct * 360;
+    document.getElementById('countdownRing').style.background =
+      `conic-gradient(#e08a3c ${deg}deg, rgba(255,255,255,0.18) ${deg}deg)`;
+  }
+  updateCountdown();
+
+  const backdrop = document.getElementById('modalBackdrop');
+  const formView = document.getElementById('formView');
+  const successView = document.getElementById('successView');
+  const regForm = document.getElementById('regForm');
+  const participantsContainer = document.getElementById('participantsContainer');
+
+  // Sport events available per age group. "Community" events are open to everyone.
+  // "Ladies" events are added on top of the adult list when gender is Female.
+  const SPORTS = {
+    adults:   [['Adults – Tug of War','Tug of war'], ['Adults – Cricket','Cricket'], ['Adults – 3K Run','3K run']],
+    kids10:   [['Kids >10 – Cricket','Cricket'], ['Kids >10 – Slow Cycling','Slow cycling'], ['Kids >10 – Frog Jump','Frog jump'], ['Kids >10 – Lemon & Spoon','Lemon & spoon']],
+    allKids:  [['All Kids – 100m Running Race','100mtrs running race'], ['All Kids – Pick & Place','Pick & place']],
+    ladies:   [['Ladies – Grab the Cup','Grab the cup'], ['Ladies – Tug of War','Tug of war'], ['Ladies – 3K Run','3K run inside community']],
+    community:[['Community – Tambola','Tambola']]
+  };
+
+  function sportsForAgeGender(age, gender){
+    let list = [];
+    if (age === '<10'){
+      list = [...SPORTS.allKids];
+    } else if (age === '10-15' || age === '15-20'){
+      list = [...SPORTS.kids10, ...SPORTS.allKids];
+    } else if (age === '20-50' || age === '>50'){
+      list = [...SPORTS.adults];
+      if (gender === 'Female') list = [...list, ...SPORTS.ladies];
+    }
+    if (age) list = [...list, ...SPORTS.community];
+    return list;
+  }
+
+  let participantCount = 0;
+
+  function addParticipant(){
+    participantCount++;
+    const idx = participantCount;
+    const card = document.createElement('div');
+    card.className = 'participant-card';
+    card.dataset.index = idx;
+    card.innerHTML = `
+      <div class="participant-card-head">
+        <span class="eyebrow">Participant</span>
+        <button type="button" class="remove-participant" onclick="removeParticipant(this)">Remove</button>
+      </div>
+      <div class="field-row">
+        <div>
+          <label>Name</label>
+          <input type="text" class="p-name" required placeholder="Participant's name">
+        </div>
+        <div>
+          <label>Gender</label>
+          <select class="p-gender" required>
+            <option value="" disabled selected>Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Kids</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label>Age group</label>
+        <select class="p-age" required>
+          <option value="" disabled selected>Select</option>
+          <option>&lt;10</option>
+          <option>10-15</option>
+          <option>15-20</option>
+          <option>20-50</option>
+          <option>&gt;50</option>
+        </select>
+      </div>
+      <div>
+        <label style="margin-bottom:2px;">Sport events</label>
+        <div class="sports-list"></div>
+        <p class="sports-empty">Select gender and age group to see this person's eligible events.</p>
+      </div>
+    `;
+    participantsContainer.appendChild(card);
+
+    const ageSelect = card.querySelector('.p-age');
+    const genderSelect = card.querySelector('.p-gender');
+    const refresh = () => renderSportsForCard(card);
+    ageSelect.addEventListener('change', refresh);
+    genderSelect.addEventListener('change', refresh);
+
+    updateRemoveButtons();
+  }
+
+  function removeParticipant(btn){
+    const card = btn.closest('.participant-card');
+    card.remove();
+    updateRemoveButtons();
+  }
+
+  function updateRemoveButtons(){
+    const cards = participantsContainer.querySelectorAll('.participant-card');
+    cards.forEach(card => {
+      const btn = card.querySelector('.remove-participant');
+      btn.style.visibility = cards.length > 1 ? 'visible' : 'hidden';
+    });
+  }
+
+  function renderSportsForCard(card){
+    const age = card.querySelector('.p-age').value;
+    const gender = card.querySelector('.p-gender').value;
+    const list = card.querySelector('.sports-list');
+    const empty = card.querySelector('.sports-empty');
+    list.innerHTML = '';
+
+    if (!age){
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    const options = sportsForAgeGender(age, gender);
+    options.forEach(([value, label]) => {
+      const wrap = document.createElement('label');
+      wrap.className = 'check';
+      wrap.innerHTML = `<input type="checkbox" class="p-sport" value="${value}"> ${label}`;
+      list.appendChild(wrap);
+    });
+  }
+
+  function resetParticipants(){
+    participantsContainer.innerHTML = '';
+    participantCount = 0;
+    addParticipant();
+  }
+
+  function openModal(){
+    backdrop.classList.add('open');
+    formView.style.display = 'block';
+    successView.classList.remove('show');
+    regForm.reset();
+    resetParticipants();
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  backdrop.addEventListener('click', (e) => {
+    if(e.target === backdrop) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeModal();
+  });
+
+  regForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const submitBtn = regForm.querySelector('button[type="submit"]');
+
+    const cards = Array.from(participantsContainer.querySelectorAll('.participant-card'));
+    const participants = cards.map(card => ({
+      name: card.querySelector('.p-name').value.trim(),
+      gender: card.querySelector('.p-gender').value,
+      age: card.querySelector('.p-age').value,
+      sports: Array.from(card.querySelectorAll('.p-sport:checked')).map(cb => cb.value)
+    }));
+
+    if (participants.length === 0 || participants.some(p => !p.name || !p.gender || !p.age)){
+      alert('Please fill in name, gender, and age group for every participant.');
+      return;
+    }
+
+    const contactName = document.getElementById('fcontact').value.trim();
+
+    const entry = {
+      tower: document.getElementById('ftower').value.trim(),
+      flat: document.getElementById('fflat').value.trim(),
+      contactName: contactName,
+      email: document.getElementById('femail').value.trim(),
+      phone: document.getElementById('fphone').value.trim(),
+      note: document.getElementById('fnote').value.trim(),
+      participants: participants,
+      submittedAt: new Date().toISOString()
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving...';
+
+    try {
+      const key = 'registrations:' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+      await window.storage.set(key, JSON.stringify(entry), true); // shared so organizers can see all entries
+      formView.style.display = 'none';
+      successView.classList.add('show');
+      const names = participants.map(p => p.name.split(' ')[0]).join(', ');
+      document.getElementById('successMsg').textContent =
+        `Thanks, ${names} — see you at the Independence Day celebration on 15 August.`;
+    } catch (err) {
+      console.error('Could not save registration:', err);
+      alert("Sorry, we couldn't save your registration. Please try again.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm registration';
+    }
+  });
+
+  // --- Admin: password-gated view & export of registrations ---
+  const ADMIN_PASSWORD = "OnCloud33_2026"; // change this to your own password
+
+  const adminBackdrop = document.getElementById('adminBackdrop');
+  const adminGate = document.getElementById('adminGate');
+  const adminContent = document.getElementById('adminContent');
+  const gateForm = document.getElementById('gateForm');
+  const gateError = document.getElementById('gateError');
+
+  function openAdmin(){
+    adminBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    adminGate.style.display = 'block';
+    adminContent.style.display = 'none';
+    gateError.style.display = 'none';
+    document.getElementById('adminPass').value = '';
+  }
+  function closeAdmin(){
+    adminBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  adminBackdrop.addEventListener('click', (e) => {
+    if(e.target === adminBackdrop) closeAdmin();
+  });
+
+  gateForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entered = document.getElementById('adminPass').value;
+    if (entered === ADMIN_PASSWORD){
+      gateError.style.display = 'none';
+      adminGate.style.display = 'none';
+      adminContent.style.display = 'block';
+      await loadRegistrations();
+    } else {
+      gateError.style.display = 'block';
+    }
+  });
+
+  let cachedRegistrations = [];
+
+  async function loadRegistrations(){
+    const tbody = document.getElementById('regTableBody');
+    const empty = document.getElementById('regEmpty');
+    tbody.innerHTML = '';
+    cachedRegistrations = [];
+
+    try {
+      const listResult = await window.storage.list('registrations:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+
+      if (keys.length === 0){
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      for (const key of keys){
+        try {
+          const result = await window.storage.get(key, true);
+          if (result && result.value){
+            const entry = JSON.parse(result.value);
+            cachedRegistrations.push(entry);
+          }
+        } catch (err) {
+          console.error('Could not read entry', key, err);
+        }
+      }
+
+      cachedRegistrations.sort((a,b) => new Date(a.submittedAt) - new Date(b.submittedAt));
+
+      const rows = flattenToRows(cachedRegistrations);
+      if (rows.length === 0){
+        empty.style.display = 'block';
+      } else {
+        empty.style.display = 'none';
+      }
+
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--line)';
+        tr.innerHTML = `
+          <td style="padding:8px 6px;">${escapeHtml(row.tower)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.flat)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.name)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.gender)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.age)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.sports)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.contactName)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.phone)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.email)}</td>
+          <td style="padding:8px 6px;">${escapeHtml(row.note || '—')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (err) {
+      console.error('Could not load registrations:', err);
+      empty.textContent = 'Could not load registrations. Please try again.';
+      empty.style.display = 'block';
+    }
+  }
+
+  // Each stored submission covers one flat with several participants.
+  // Flatten to one row per participant for the table and spreadsheet export.
+  function flattenToRows(registrations){
+    const rows = [];
+    registrations.forEach(entry => {
+      const participants = Array.isArray(entry.participants) && entry.participants.length
+        ? entry.participants
+        : [{ name: entry.name, gender: entry.gender, age: entry.age, sports: entry.sports }]; // fallback for older single-participant entries
+      participants.forEach(p => {
+        rows.push({
+          tower: entry.tower,
+          flat: entry.flat,
+          name: p.name,
+          gender: p.gender,
+          age: p.age,
+          sports: Array.isArray(p.sports) ? p.sports.join(', ') : (p.sports || ''),
+          contactName: entry.contactName || entry.name || '',
+          phone: entry.phone,
+          email: entry.email,
+          note: entry.note,
+          submittedAt: entry.submittedAt
+        });
+      });
+    });
+    return rows;
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  function downloadCSV(){
+    const rows = flattenToRows(cachedRegistrations);
+    if (rows.length === 0){
+      alert('No registrations to export yet.');
+      return;
+    }
+    const headers = ['Tower', 'Flat', 'Participant Name', 'Gender', 'Age Group', 'Sport Events', 'Contact Name', 'Phone', 'Email', 'Note', 'Submitted At'];
+    const csvRows = rows.map(r => [
+      r.tower, r.flat, r.name, r.gender, r.age, r.sports, r.contactName, r.phone, r.email, r.note, r.submittedAt
+    ]);
+    const csvContent = [headers, ...csvRows]
+      .map(row => row.map(cell => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'independence-day-registrations.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>
