@@ -699,7 +699,7 @@
     <button class="modal-close" onclick="closeStory()" aria-label="Close">✕</button>
     <div class="eyebrow">OnCloud33 Volunteers Committee</div>
     <h3 id="storyTitle">Our story</h3>
-    <div id="storyBody" style="margin-top:14px; font-size:14.5px; line-height:1.7; color:rgba(33,31,26,0.85); white-space:pre-line;"></div>
+    <div id="storyBody" style="margin-top:14px; font-size:14.5px; line-height:1.7; color:rgba(33,31,26,0.85);"></div>
     <p id="storyUpdatedAt" style="margin-top:18px; font-size:12px; color:rgba(33,31,26,0.5);"></p>
   </div>
 </div>
@@ -1021,7 +1021,11 @@
         <p class="sub">This is shown to residents in a pop-up when they click "Our story" on the homepage. Use it to share handover progress, amenity status, and community milestones.</p>
         <form id="storyForm">
           <div><label for="stTitle">Title</label><input type="text" id="stTitle" required placeholder="e.g. Our story"></div>
-          <div><label for="stBody">Story content</label><textarea id="stBody" required rows="10" placeholder="Write the full story here..." style="min-height:220px;"></textarea></div>
+          <div>
+            <label for="stBody">Story content</label>
+            <p class="sub" style="margin:2px 0 6px;">Tip: start a line with <code>##</code> to make it a bold heading with an icon (e.g. <code>## Amenities update</code>). Start a line with <code>•</code> or <code>-</code> for a bulleted point. Leave a blank line between paragraphs.</p>
+            <textarea id="stBody" required rows="10" placeholder="Write the full story here..." style="min-height:220px;"></textarea>
+          </div>
           <div class="submit-row"><button type="submit" class="btn btn-primary">Publish story</button></div>
         </form>
         <p id="storySavedMsg" style="display:none; color:var(--green); font-size:13px; margin-top:8px;">Story published.</p>
@@ -2354,12 +2358,13 @@
   // --- Our Story (resident-facing pop-up, admin-editable) ---
   const STORY_KEY = 'ourStory:main';
   const DEFAULT_STORY_TITLE = 'Our story';
-  const DEFAULT_STORY_BODY = `OnCloud 33 is no longer just a promise on paper — it's becoming home. With 1,200+ units already handed over and residents from 3 of 5 towers having moved in and started living, the sound of daily life — kids playing, neighbours meeting in the lobby, evening walks around the block — has begun filling spaces that were once just blueprints. A fourth tower has now also begun its handover process, bringing even more families a step closer to calling OnCloud 33 home.
+  const DEFAULT_STORY_BODY = `## A community coming to life
+OnCloud 33 is no longer just a promise on paper — it's becoming home. With 1,200+ units already handed over and residents from 3 of 5 towers having moved in and started living, the sound of daily life — kids playing, neighbours meeting in the lobby, evening walks around the block — has begun filling spaces that were once just blueprints. A fourth tower has now also begun its handover process, bringing even more families a step closer to calling OnCloud 33 home.
 
-Amenities: half-way there, and counting
+## Amenities: half-way there, and counting
 Out of the 102 planned amenities, 52 are already fully functional — giving residents real, everyday access to shared spaces even this early in the community's life. The remaining amenities are on track to come alive over the next 30–45 days, rounding out the full experience OnCloud 33 promises: recreation, wellness, and community spaces designed for every age and interest.
 
-Built by residents, for residents
+## Built by residents, for residents
 What makes OnCloud 33 different in this early chapter is who's been shaping it. With no formal committee or association yet in place, it's been a small group of resident volunteers stepping up — engaging directly with the builder to resolve day-to-day issues, and bringing the community together through shared celebration. This year alone, volunteers organized:
 
 • Independence Day (15th August) — a flag hoisting ceremony and cultural celebration that brought together residents from across the towers, many meeting each other for the first time.
@@ -2367,7 +2372,7 @@ What makes OnCloud 33 different in this early chapter is who's been shaping it. 
 
 Every rupee collected for these celebrations, and every asset purchased with it — from the shamiana to the sound system — is being tracked transparently, ready to be handed over intact to the association once it's formally constituted.
 
-What's next
+## What's next
 As more towers complete handover and the remaining amenities switch on over the coming weeks, OnCloud 33 is steadily transforming from a construction milestone into a living, self-organizing community — one where residents aren't just waiting for a committee to arrive, but are already building the culture that committee will one day inherit.`;
 
   function openStory(){
@@ -2395,11 +2400,56 @@ As more towers complete handover and the remaining amenities switch on over the 
         updatedAt = data.updatedAt || '';
       }
       document.getElementById('storyTitle').textContent = title;
-      document.getElementById('storyBody').textContent = body;
+      document.getElementById('storyBody').innerHTML = formatStoryBody(body);
       document.getElementById('storyUpdatedAt').textContent = updatedAt
         ? `Last updated ${new Date(updatedAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}`
         : '';
     } catch (err){ console.error('Could not load story', err); }
+  }
+
+  // Turns plain text with lightweight markers into styled HTML:
+  //   "## Heading"      -> bold section heading with an icon
+  //   "• item" / "- item" -> bulleted list item with an icon
+  //   blank line         -> paragraph break
+  // Admins can just type "## " before a line to make it a heading.
+  const STORY_SECTION_ICONS = ['🏘️', '🎪', '🤝', '🚀', '📌', '✨'];
+  function formatStoryBody(raw){
+    const escaped = escAttr(raw);
+    const lines = escaped.split('\n');
+    let html = '';
+    let iconIdx = 0;
+    let inList = false;
+
+    function closeList(){
+      if (inList){ html += '</ul>'; inList = false; }
+    }
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed === ''){
+        closeList();
+        html += '<div style="height:10px;"></div>';
+        return;
+      }
+      const headingMatch = trimmed.match(/^##\s*(.+)$/);
+      if (headingMatch){
+        closeList();
+        const icon = STORY_SECTION_ICONS[iconIdx % STORY_SECTION_ICONS.length];
+        iconIdx++;
+        html += `<h4 style="margin:18px 0 8px; font-size:16.5px; font-weight:800; display:flex; align-items:center; gap:8px;"><span>${icon}</span><span>${headingMatch[1]}</span></h4>`;
+        return;
+      }
+      const bulletMatch = trimmed.match(/^[•\-]\s*(.+)$/);
+      if (bulletMatch){
+        if (!inList){ html += '<ul style="margin:6px 0 6px 4px; padding-left:0; list-style:none;">'; inList = true; }
+        html += `<li style="display:flex; gap:8px; margin:6px 0;"><span>🔸</span><span>${bulletMatch[1]}</span></li>`;
+        return;
+      }
+      closeList();
+      html += `<p style="margin:4px 0;">${trimmed}</p>`;
+    });
+    closeList();
+    return html;
   }
 
   const storyForm = document.getElementById('storyForm');
