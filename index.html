@@ -89,6 +89,22 @@
   }
   .brand-lockup.footer-lockup .l-oncloud{ font-size:24px; }
 
+  /* ANNOUNCEMENTS */
+  .announcements{
+    padding:20px 28px;
+    background:rgba(224,138,60,0.10);
+    border-bottom:1px solid var(--line);
+  }
+  .announcement-item{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
+    padding:10px 0; border-bottom:1px dashed rgba(33,31,26,0.15);
+  }
+  .announcement-item:last-child{border-bottom:none;}
+  .announcement-item .a-title{font-weight:700; font-size:14.5px;}
+  .announcement-item .a-body{font-size:13.5px; color:rgba(33,31,26,0.75); margin-top:2px;}
+  .announcement-item .a-date{font-size:12px; color:rgba(33,31,26,0.5); white-space:nowrap;}
+  .announcements-empty{font-size:13.5px; color:rgba(33,31,26,0.55); padding:6px 0;}
+
   /* HERO */
   .hero{
     padding:96px 28px 80px;
@@ -280,6 +296,8 @@
     margin-top:20px; font-size:13.5px; font-weight:500; color:rgba(33,31,26,0.55);
     font-style:italic; align-self:flex-start;
   }
+  .admin-tab-btn.active{background:var(--indigo); color:var(--cream); border-color:var(--indigo);}
+  .past-card .past-links{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
 
   /* FACILITIES */
   .facilities{padding:80px 28px;}
@@ -443,8 +461,18 @@
         <span class="l-tagline">Endless Everything</span>
       </div>
     </div>
+    <button class="btn btn-ghost btn-small" onclick="openAdmin()" style="border-color:var(--line);">Admin login</button>
   </nav>
 </header>
+
+<div id="dynamicSectionsTop"></div>
+
+<section class="announcements" id="announcements" style="display:none;">
+  <div class="wrap">
+    <div class="eyebrow">📣 Announcements</div>
+    <div id="announcementsList" style="margin-top:10px;"></div>
+  </div>
+</section>
 
 <section class="hero">
   <div class="hero-inner">
@@ -453,7 +481,7 @@
     <p>We're the residents, shopkeepers, teachers, and families of OnCloud33 — organizing the gatherings, drives, and celebrations that make this place feel like home.</p>
     <div class="hero-cta">
       <a href="#events" class="btn btn-primary">Browse events</a>
-      <span class="btn btn-ghost btn-disabled">Our story — under construction</span>
+      <button type="button" class="btn btn-ghost" onclick="openStory()">Our story</button>
     </div>
   </div>
 </section>
@@ -503,44 +531,46 @@
     </div>
 
     <div class="events-grid">
-      <!-- Featured: Independence Day -->
-      <div class="event-card event-featured">
-        <div class="ring-wrap">
-          <div class="ring" id="countdownRing">
-            <div class="ring-inner">
-              <span class="d" id="daysLeft">--</span>
-              <span class="lbl">DAYS</span>
-            </div>
-          </div>
-        </div>
-        <div class="body">
-          <div class="eyebrow">Featured event</div>
-          <h3>Independence Day Celebration</h3>
-          <div class="meta">
-            <span>📅 Saturday, 15 August 2026</span>
-            <span>📍 OnCloud33 Clubhouse Ground Floor</span>
-          </div>
-          <p class="desc">Flag hoisting at 9:00 AM, a children's cultural program, refreshments will be provided, and an evening lamp-lighting ceremony. Bring the whole household.</p>
-          <a class="btn btn-primary" href="https://forms.gle/EH6hMPe1ReZC9Wsy5" target="_blank" rel="noopener">Register for the event</a>
-        </div>
-      </div>
-
       <div class="event-card small">
-        <div class="eyebrow">Festival</div>
-        <h3>Vinayaka Chaturthi</h3>
-        <div class="meta">MON · 14 SEP · Ganesh sthapana & aarti</div>
-        <p>Ganesha idol installation at the clubhouse, morning and evening aarti through the festival, and community visarjan to close.</p>
-        <span class="link-static">Keep monitoring this for updates</span>
-      </div>
-
-      <div class="event-card small">
-        <div class="eyebrow">Festival</div>
-        <h3>Navaratri & Dussehra</h3>
-        <div class="meta">11–20 OCT · 10 Days of Puja</div>
-        <p>Ten days of daily puja to Maa at the clubhouse, with a different avataram of the Goddess honored each day, closing with visarjan on Dussehra.</p>
-        <span class="link-static">Keep monitoring this for updates</span>
+        <div class="eyebrow">Coming soon</div>
+        <h3>More festivals ahead</h3>
+        <div class="meta">Date &amp; theme to be finalized</div>
+        <p>We're still figuring out which festival the community wants to celebrate next. Keep an eye on this space — organizers will post the details here as soon as they're locked in.</p>
+        <span class="link-static">Keep looking here for updates</span>
       </div>
     </div>
+    <div id="dynamicUpcomingEvents"></div>
+  </div>
+</section>
+
+<section class="past-events" id="past-events">
+  <div class="wrap">
+    <div class="events-head">
+      <div class="eyebrow">Memories</div>
+      <h2>Past events</h2>
+    </div>
+    <div class="events-grid" id="pastEventsGrid">
+      <div class="event-card small past-card">
+        <div class="eyebrow">Festival · 15 Aug 2026</div>
+        <h3>Independence Day Celebration</h3>
+        <p>Flag hoisting, cultural program, and evening festivities celebrated together as a community.</p>
+        <div class="past-links">
+          <a href="https://drive.google.com/drive/folders/1KHYfDbVOA96cp1uIZsc0-zmLCWxb7zMM" target="_blank" rel="noopener" class="btn btn-ghost btn-small">📁 Photos/Videos — Drive 1</a>
+          <a href="https://drive.google.com/drive/folders/1nIu9PdA9AGBi12mk_QCMVOVmOdrDUyI-?usp=sharing" target="_blank" rel="noopener" class="btn btn-ghost btn-small">📁 Photos/Videos — Drive 2</a>
+          <a href="https://www.instagram.com/reel/DcP_efyDm5f/?stkn=MmRrcGRmN3BjdnNy" target="_blank" rel="noopener" class="btn btn-ghost btn-small">🎬 Instagram reel</a>
+        </div>
+      </div>
+      <div class="event-card small past-card">
+        <div class="eyebrow">Festival · Sep 2026</div>
+        <h3>Ganesh Chaturthi Mahotsav</h3>
+        <p>Ganesh sthapana, daily aarti, and community visarjan — organized with residents' contributions.</p>
+        <div class="past-links">
+          <a href="https://sites.google.com/view/oc33ganeshmahotsav-2026/home" target="_blank" rel="noopener" class="btn btn-ghost btn-small">🌐 Event site</a>
+          <a href="https://drive.google.com/drive/folders/1Ubr0uh8FrluiX3LCIN2W83Oj_HZgE8pS?usp=sharing" target="_blank" rel="noopener" class="btn btn-ghost btn-small">📁 Photos/Videos — Drive</a>
+        </div>
+      </div>
+    </div>
+    <div id="dynamicPastEvents"></div>
   </div>
 </section>
 
@@ -553,8 +583,8 @@
     <div class="groups-grid">
       <div class="group-card">
         <h3>Owners' WhatsApp Group</h3>
-        <p>For requests to join the owners' group, please reach out to the facility team directly.</p>
-        <span class="link-static">Reach out to Facility team for volunteers contact details</span>
+        <p>To request access to the owners' group, submit this form and a volunteer will add you.</p>
+        <a href="https://forms.gle/Q166i17gv2AycuHA8" target="_blank" rel="noopener" class="btn btn-primary btn-small">Request to join</a>
       </div>
       <div class="group-card">
         <h3>Interested to be a volunteer?</h3>
@@ -612,6 +642,29 @@
   </div>
 </section>
 
+<section class="inventory" id="inventory">
+  <div class="wrap">
+    <div class="events-head">
+      <div class="eyebrow">Transparency</div>
+      <h2>Inventory &amp; funds management</h2>
+    </div>
+    <div class="groups-grid">
+      <div class="group-card">
+        <h3>🎪 Assets available</h3>
+        <p id="assetsSummaryText">Loading asset summary…</p>
+        <button class="btn btn-primary btn-small" onclick="openAssetsDetail()">View detailed tracker</button>
+      </div>
+      <div class="group-card">
+        <h3>💰 Cash available</h3>
+        <p id="cashSummaryText">Loading cash summary…</p>
+        <button class="btn btn-primary btn-small" onclick="openCashDetail()">View detailed tracker</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="dynamicSectionsBottom"></div>
+
 <footer id="contact">
   <div class="footer-inner">
     <div>
@@ -639,6 +692,17 @@
     </div>
   </div>
 </footer>
+
+<!-- OUR STORY MODAL -->
+<div class="modal-backdrop" id="storyBackdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" onclick="closeStory()" aria-label="Close">✕</button>
+    <div class="eyebrow">OnCloud33 Volunteers Committee</div>
+    <h3 id="storyTitle">Our story</h3>
+    <div id="storyBody" style="margin-top:14px; font-size:14.5px; line-height:1.7; color:rgba(33,31,26,0.85); white-space:pre-line;"></div>
+    <p id="storyUpdatedAt" style="margin-top:18px; font-size:12px; color:rgba(33,31,26,0.5);"></p>
+  </div>
+</div>
 
 <!-- REGISTRATION MODAL -->
 <div class="modal-backdrop" id="modalBackdrop">
@@ -710,9 +774,13 @@
 
     <div id="adminGate">
       <div class="eyebrow">Organizers only</div>
-      <h3>Enter password</h3>
-      <p class="sub">This area holds everyone's contact details — please don't share the password.</p>
+      <h3>Volunteer login</h3>
+      <p class="sub">This area holds registrations, event management, and community funds/inventory — please don't share the password.</p>
       <form id="gateForm" style="margin-top:20px;">
+        <div>
+          <label for="adminName">Your name (volunteer)</label>
+          <input type="text" id="adminName" required placeholder="e.g. Ramesh Kumar">
+        </div>
         <div>
           <label for="adminPass">Password</label>
           <input type="password" id="adminPass" required placeholder="Enter password">
@@ -722,40 +790,407 @@
           <button type="submit" class="btn btn-primary">Unlock</button>
         </div>
       </form>
+      <div style="margin-top:22px; padding-top:18px; border-top:1px solid var(--line);">
+        <button type="button" class="btn btn-ghost btn-small" onclick="toggleChangePassword()">Change password</button>
+        <button type="button" class="btn btn-ghost btn-small" onclick="toggleResetPassword()">Reset password (forgot)</button>
+
+        <form id="changePassForm" style="display:none; margin-top:14px;">
+          <div>
+            <label for="cpName">Volunteer name (requesting change)</label>
+            <input type="text" id="cpName" required placeholder="Your name">
+          </div>
+          <div>
+            <label for="cpCurrent1">Current password</label>
+            <input type="password" id="cpCurrent1" required placeholder="Enter current password">
+          </div>
+          <div>
+            <label for="cpCurrent2">Re-enter current password</label>
+            <input type="password" id="cpCurrent2" required placeholder="Re-enter current password">
+          </div>
+          <div>
+            <label for="cpNew">New password</label>
+            <input type="password" id="cpNew" required placeholder="Enter new password">
+          </div>
+          <p id="cpError" style="display:none; color:#b3402a; font-size:13px; margin-top:-6px;"></p>
+          <p id="cpSuccess" style="display:none; color:var(--green); font-size:13px; margin-top:-6px;"></p>
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary btn-small">Update password</button>
+          </div>
+        </form>
+
+        <form id="resetPassForm" style="display:none; margin-top:14px;">
+          <p class="sub" style="margin:0 0 10px;">Resets the login password back to the default (<strong>OnCloud33</strong>). Anyone requesting this must verify the code below and provide their flat details, so it's traceable.</p>
+          <div>
+            <label for="rpName">Volunteer / requester name</label>
+            <input type="text" id="rpName" required placeholder="Your name">
+          </div>
+          <div>
+            <label for="rpFlat">Flat / Tower No.</label>
+            <input type="text" id="rpFlat" required placeholder="e.g. Tower 3, Flat 1204">
+          </div>
+          <div>
+            <label>Verification code</label>
+            <div style="display:flex; gap:10px; align-items:center; margin-top:4px;">
+              <div id="captchaText" style="font-family:monospace; font-size:20px; font-weight:700; letter-spacing:4px; background:rgba(33,31,26,0.06); padding:8px 16px; border-radius:8px; user-select:none;"></div>
+              <button type="button" class="btn btn-ghost btn-small" onclick="regenerateCaptcha()">↻ Refresh code</button>
+            </div>
+          </div>
+          <div>
+            <label for="rpCaptcha">Enter the code shown above</label>
+            <input type="text" id="rpCaptcha" required placeholder="Type the code exactly as shown">
+          </div>
+          <p id="rpError" style="display:none; color:#b3402a; font-size:13px; margin-top:-6px;"></p>
+          <p id="rpSuccess" style="display:none; color:var(--green); font-size:13px; margin-top:-6px;"></p>
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary btn-small">Reset to default password</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <div id="adminContent" style="display:none;">
       <div class="eyebrow">Organizers only</div>
-      <h3>Independence Day registrations</h3>
-      <p class="sub">Everyone who has registered so far.</p>
-      <div style="margin-top:18px; overflow-x:auto;">
-        <table id="regTable" style="width:100%; border-collapse:collapse; font-size:13.5px;">
-          <thead>
-            <tr style="text-align:left; border-bottom:1px solid var(--line);">
-              <th style="padding:8px 6px;">Tower</th>
-              <th style="padding:8px 6px;">Flat</th>
-              <th style="padding:8px 6px;">Participant</th>
-              <th style="padding:8px 6px;">Gender</th>
-              <th style="padding:8px 6px;">Age</th>
-              <th style="padding:8px 6px;">Sport events</th>
-              <th style="padding:8px 6px;">Contact name</th>
-              <th style="padding:8px 6px;">Phone</th>
-              <th style="padding:8px 6px;">Email</th>
-              <th style="padding:8px 6px;">Note</th>
-            </tr>
-          </thead>
-          <tbody id="regTableBody"></tbody>
-        </table>
-        <p id="regEmpty" style="display:none; font-size:13.5px; color:rgba(33,31,26,0.6); padding:16px 0;">No registrations yet.</p>
+      <h3>Admin panel</h3>
+      <p class="sub" id="loggedInAs">Manage registrations, events, and community inventory/funds.</p>
+
+      <div class="admin-tabs" style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-ghost btn-small admin-tab-btn active" data-tab="tab-reg" onclick="switchAdminTab('tab-reg')">Registrations</button>
+        <button type="button" class="btn btn-ghost btn-small admin-tab-btn" data-tab="tab-events" onclick="switchAdminTab('tab-events')">Events</button>
+        <button type="button" class="btn btn-ghost btn-small admin-tab-btn" data-tab="tab-inventory" onclick="switchAdminTab('tab-inventory')">Inventory &amp; funds</button>
+        <button type="button" class="btn btn-ghost btn-small admin-tab-btn" data-tab="tab-story" onclick="switchAdminTab('tab-story')">Our story</button>
+        <button type="button" class="btn btn-ghost btn-small admin-tab-btn" data-tab="tab-announcements" onclick="switchAdminTab('tab-announcements')">Announcements</button>
+        <button type="button" class="btn btn-ghost btn-small admin-tab-btn" data-tab="tab-sections" onclick="switchAdminTab('tab-sections')">Custom sections</button>
       </div>
-      <div class="submit-row" style="margin-top:20px;">
-        <button class="btn btn-primary" onclick="downloadCSV()">Download as spreadsheet (CSV)</button>
+
+      <div id="tab-reg" class="admin-tab-panel" style="margin-top:20px;">
+        <h3 style="font-size:18px;">Independence Day registrations</h3>
+        <p class="sub">Everyone who has registered so far.</p>
+        <div style="margin-top:18px; overflow-x:auto;">
+          <table id="regTable" style="width:100%; border-collapse:collapse; font-size:13.5px;">
+            <thead>
+              <tr style="text-align:left; border-bottom:1px solid var(--line);">
+                <th style="padding:8px 6px;">Tower</th>
+                <th style="padding:8px 6px;">Flat</th>
+                <th style="padding:8px 6px;">Participant</th>
+                <th style="padding:8px 6px;">Gender</th>
+                <th style="padding:8px 6px;">Age</th>
+                <th style="padding:8px 6px;">Sport events</th>
+                <th style="padding:8px 6px;">Contact name</th>
+                <th style="padding:8px 6px;">Phone</th>
+                <th style="padding:8px 6px;">Email</th>
+                <th style="padding:8px 6px;">Note</th>
+              </tr>
+            </thead>
+            <tbody id="regTableBody"></tbody>
+          </table>
+          <p id="regEmpty" style="display:none; font-size:13.5px; color:rgba(33,31,26,0.6); padding:16px 0;">No registrations yet.</p>
+        </div>
+        <div class="submit-row" style="margin-top:20px;">
+          <button class="btn btn-primary" onclick="downloadCSV()">Download as spreadsheet (CSV)</button>
+        </div>
+      </div>
+
+      <div id="tab-events" class="admin-tab-panel" style="margin-top:20px; display:none;">
+        <h3 style="font-size:18px;">Add / update an upcoming event</h3>
+        <form id="upcomingEventForm">
+          <div class="field-row">
+            <div><label for="ueTitle">Title</label><input type="text" id="ueTitle" required placeholder="e.g. Diwali Celebration"></div>
+            <div><label for="ueMeta">Date / schedule line</label><input type="text" id="ueMeta" required placeholder="e.g. SUN · 08 NOV · Lamp lighting at 6 PM"></div>
+          </div>
+          <div><label for="ueDesc">Description</label><textarea id="ueDesc" required placeholder="Schedule details, venue, timings..."></textarea></div>
+          <div><label for="ueLink">Registration / info link (optional)</label><input type="text" id="ueLink" placeholder="https://forms.gle/..."></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Publish upcoming event</button></div>
+        </form>
+        <div id="upcomingEventList" style="margin-top:14px;"></div>
+
+        <h3 style="font-size:18px; margin-top:28px;">Add / update a past event</h3>
+        <form id="pastEventForm">
+          <div class="field-row">
+            <div><label for="peTitle">Title</label><input type="text" id="peTitle" required placeholder="e.g. Diwali Celebration"></div>
+            <div><label for="peMeta">Date line</label><input type="text" id="peMeta" required placeholder="e.g. Festival · 08 Nov 2026"></div>
+          </div>
+          <div><label for="peDesc">Description</label><textarea id="peDesc" required placeholder="How it went..."></textarea></div>
+          <div><label for="peLinks">Links (Drive/Instagram/Site) — comma-separated "Label|URL" pairs</label><textarea id="peLinks" placeholder="Photos/Videos — Drive|https://drive.google.com/...,Instagram reel|https://instagram.com/..."></textarea></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Publish past event</button></div>
+        </form>
+        <div id="pastEventList" style="margin-top:14px;"></div>
+      </div>
+
+      <div id="tab-inventory" class="admin-tab-panel" style="margin-top:20px; display:none;">
+        <h3 style="font-size:18px;">Add an asset</h3>
+        <form id="assetForm">
+          <div class="field-row">
+            <div><label for="asName">Asset name</label><input type="text" id="asName" required placeholder="e.g. PA Sound System"></div>
+            <div><label for="asCategory">Category</label><input type="text" id="asCategory" required placeholder="e.g. Sound & Electronics"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="asQty">Quantity</label><input type="text" id="asQty" required placeholder="e.g. 1"></div>
+            <div><label for="asCost">Total cost (INR)</label><input type="text" id="asCost" required placeholder="e.g. 22000"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="asEvent">Event/Occasion</label><input type="text" id="asEvent" required placeholder="e.g. Independence Day 2026"></div>
+            <div><label for="asDate">Purchase date</label><input type="text" id="asDate" placeholder="DD-MM-YYYY"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="asCustodian">Custodian</label><input type="text" id="asCustodian" placeholder="Responsible volunteer"></div>
+            <div><label for="asLocation">Storage location</label><input type="text" id="asLocation" placeholder="e.g. Clubhouse store room"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="asCondition">Condition</label><input type="text" id="asCondition" placeholder="e.g. New"></div>
+            <div>
+              <label for="asHandover">Handover status</label>
+              <select id="asHandover">
+                <option>Pending</option>
+                <option>Handed Over</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div><label for="asRemarks">Remarks</label><input type="text" id="asRemarks" placeholder="Optional notes"></div>
+            <div><label for="asLink">Reference link (bill/photo/invoice — optional)</label><input type="text" id="asLink" placeholder="https://..."></div>
+          </div>
+          <div id="assetCustomFields"></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Add asset</button></div>
+        </form>
+        <div id="assetAdminList" style="margin-top:14px;"></div>
+
+        <details style="margin-top:20px;">
+          <summary style="cursor:pointer; font-size:13.5px; font-weight:600;">⚙️ Manage asset tracker columns</summary>
+          <div style="margin-top:12px;">
+            <p class="sub" style="margin:0 0 10px;">Add a custom column (e.g. "Warranty till", "Serial No.") — it will appear in the add-asset form above and in the detailed tracker table.</p>
+            <form id="assetColumnForm" style="display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end;">
+              <div style="flex:1; min-width:180px;"><label for="assetColumnName">New column name</label><input type="text" id="assetColumnName" placeholder="e.g. Warranty till"></div>
+              <button type="submit" class="btn btn-primary btn-small">Add column</button>
+            </form>
+            <div id="assetColumnList" style="margin-top:10px;"></div>
+          </div>
+        </details>
+
+        <h3 style="font-size:18px; margin-top:28px;">Add a cash entry</h3>
+        <form id="cashForm">
+          <div class="field-row">
+            <div>
+              <label for="csType">Type</label>
+              <select id="csType"><option>Inflow</option><option>Outflow</option></select>
+            </div>
+            <div><label for="csDate">Date</label><input type="text" id="csDate" placeholder="DD-MM-YYYY"></div>
+          </div>
+          <div><label for="csDesc">Description</label><input type="text" id="csDesc" required placeholder="e.g. Resident contribution / Tent house payment"></div>
+          <div class="field-row">
+            <div><label for="csAmount">Amount (INR)</label><input type="text" id="csAmount" required placeholder="e.g. 15000"></div>
+            <div><label for="csMode">Payment mode</label><input type="text" id="csMode" placeholder="e.g. UPI / Cash / Bank Transfer"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="csParty">Paid by / Paid to</label><input type="text" id="csParty" placeholder="Resident / vendor name"></div>
+            <div><label for="csLink">Reference link (receipt/screenshot — optional)</label><input type="text" id="csLink" placeholder="https://..."></div>
+          </div>
+          <div id="cashCustomFields"></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Add cash entry</button></div>
+        </form>
+        <div id="cashAdminList" style="margin-top:14px;"></div>
+
+        <details style="margin-top:20px;">
+          <summary style="cursor:pointer; font-size:13.5px; font-weight:600;">⚙️ Manage cash tracker columns</summary>
+          <div style="margin-top:12px;">
+            <p class="sub" style="margin:0 0 10px;">Add a custom column (e.g. "Approved by", "Bill No.") — it will appear in the add-entry form above and in the detailed tracker table.</p>
+            <form id="cashColumnForm" style="display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end;">
+              <div style="flex:1; min-width:180px;"><label for="cashColumnName">New column name</label><input type="text" id="cashColumnName" placeholder="e.g. Bill No."></div>
+              <button type="submit" class="btn btn-primary btn-small">Add column</button>
+            </form>
+            <div id="cashColumnList" style="margin-top:10px;"></div>
+          </div>
+        </details>
+
+        <h3 style="font-size:18px; margin-top:28px;">Holding account details</h3>
+        <form id="accountForm">
+          <div class="field-row">
+            <div><label for="acBank">Bank name</label><input type="text" id="acBank" placeholder="e.g. HDFC Bank"></div>
+            <div><label for="acNumber">Account number</label><input type="text" id="acNumber" placeholder="e.g. XXXX1234"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="acIfsc">IFSC</label><input type="text" id="acIfsc" placeholder="e.g. HDFC0001234"></div>
+            <div><label for="acCustodian">Custodian(s)</label><input type="text" id="acCustodian" placeholder="Names of signatories"></div>
+          </div>
+          <div><label for="acNotes">Notes</label><input type="text" id="acNotes" placeholder="Optional"></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Save account details</button></div>
+        </form>
+      </div>
+
+      <div id="tab-story" class="admin-tab-panel" style="margin-top:20px; display:none;">
+        <h3 style="font-size:18px;">Edit "Our story"</h3>
+        <p class="sub">This is shown to residents in a pop-up when they click "Our story" on the homepage. Use it to share handover progress, amenity status, and community milestones.</p>
+        <form id="storyForm">
+          <div><label for="stTitle">Title</label><input type="text" id="stTitle" required placeholder="e.g. Our story"></div>
+          <div><label for="stBody">Story content</label><textarea id="stBody" required rows="10" placeholder="Write the full story here..." style="min-height:220px;"></textarea></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Publish story</button></div>
+        </form>
+        <p id="storySavedMsg" style="display:none; color:var(--green); font-size:13px; margin-top:8px;">Story published.</p>
+      </div>
+
+      <div id="tab-announcements" class="admin-tab-panel" style="margin-top:20px; display:none;">
+        <h3 style="font-size:18px;">Post an announcement</h3>
+        <p class="sub">The most recent 3 announcements are shown to all residents at the top of the homepage.</p>
+        <form id="announcementForm">
+          <div><label for="anTitle">Title</label><input type="text" id="anTitle" required placeholder="e.g. Water supply maintenance on Sunday"></div>
+          <div><label for="anBody">Message</label><textarea id="anBody" required placeholder="Details..."></textarea></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Post announcement</button></div>
+        </form>
+        <div id="announcementAdminList" style="margin-top:14px;"></div>
+      </div>
+
+      <div id="tab-sections" class="admin-tab-panel" style="margin-top:20px; display:none;">
+        <h3 style="font-size:18px;">Add a custom section</h3>
+        <p class="sub">Publish any new block of content (announcements, new committees, notices, links...) to the top or bottom of the site — no code changes needed.</p>
+        <form id="customSectionForm">
+          <div class="field-row">
+            <div><label for="csecTitle">Section title</label><input type="text" id="csecTitle" required placeholder="e.g. New Facility Booking Rules"></div>
+            <div>
+              <label for="csecPosition">Position on page</label>
+              <select id="csecPosition">
+                <option value="top">Top of page (below header)</option>
+                <option value="bottom">Bottom of page (above footer)</option>
+              </select>
+            </div>
+          </div>
+          <div><label for="csecBody">Description / content</label><textarea id="csecBody" required placeholder="Write the section content here..."></textarea></div>
+          <div><label for="csecLinks">Links (optional) — comma-separated "Label|URL" pairs</label><textarea id="csecLinks" placeholder="Read more|https://...,Submit request|https://forms.gle/..."></textarea></div>
+          <div class="submit-row"><button type="submit" class="btn btn-primary">Publish section</button></div>
+        </form>
+        <div id="customSectionList" style="margin-top:14px;"></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ASSETS DETAIL MODAL -->
+<div class="modal-backdrop" id="assetsDetailBackdrop">
+  <div class="modal" style="max-width:960px;">
+    <button class="modal-close" onclick="closeAssetsDetail()" aria-label="Close">✕</button>
+    <div class="eyebrow">Transparency</div>
+    <h3>Asset inventory tracker</h3>
+    <p class="sub">Every permanent asset purchased for community celebrations, tracked until handover to the association.</p>
+    <div style="margin-top:18px; overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:13px;">
+        <thead>
+          <tr id="assetsDetailHeaderRow" style="text-align:left; border-bottom:1px solid var(--line);">
+            <th style="padding:8px 6px;">Asset</th>
+            <th style="padding:8px 6px;">Category</th>
+            <th style="padding:8px 6px;">Qty</th>
+            <th style="padding:8px 6px;">Cost (₹)</th>
+            <th style="padding:8px 6px;">Event</th>
+            <th style="padding:8px 6px;">Purchase date</th>
+            <th style="padding:8px 6px;">Custodian</th>
+            <th style="padding:8px 6px;">Location</th>
+            <th style="padding:8px 6px;">Condition</th>
+            <th style="padding:8px 6px;">Handover</th>
+          </tr>
+        </thead>
+        <tbody id="assetsDetailTableBody"></tbody>
+      </table>
+      <p id="assetsDetailEmpty" style="display:none; font-size:13.5px; color:rgba(33,31,26,0.6); padding:16px 0;">No assets recorded yet.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CASH DETAIL MODAL -->
+<div class="modal-backdrop" id="cashDetailBackdrop">
+  <div class="modal" style="max-width:960px;">
+    <button class="modal-close" onclick="closeCashDetail()" aria-label="Close">✕</button>
+    <div class="eyebrow">Transparency</div>
+    <h3>Cash inflow / outflow tracker</h3>
+    <p class="sub">Funds collected from residents and other parties for events, and how they were used.</p>
+    <div style="margin-top:14px;">
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <span class="eyebrow" style="color:var(--green);" id="cashTotalInflow">Inflow: ₹0</span>
+        <span class="eyebrow" style="color:#b3402a;" id="cashTotalOutflow">Outflow: ₹0</span>
+        <span class="eyebrow" style="color:var(--indigo);" id="cashBalance">Balance: ₹0</span>
+      </div>
+    </div>
+    <div style="margin-top:14px; overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:13px;">
+        <thead>
+          <tr id="cashDetailHeaderRow" style="text-align:left; border-bottom:1px solid var(--line);">
+            <th style="padding:8px 6px;">Type</th>
+            <th style="padding:8px 6px;">Date</th>
+            <th style="padding:8px 6px;">Description</th>
+            <th style="padding:8px 6px;">Amount (₹)</th>
+            <th style="padding:8px 6px;">Mode</th>
+            <th style="padding:8px 6px;">Paid by / to</th>
+          </tr>
+        </thead>
+        <tbody id="cashDetailTableBody"></tbody>
+      </table>
+      <p id="cashDetailEmpty" style="display:none; font-size:13.5px; color:rgba(33,31,26,0.6); padding:16px 0;">No cash entries recorded yet.</p>
+    </div>
+    <h3 style="font-size:16px; margin-top:22px;">Holding account</h3>
+    <div id="cashAccountDetails" style="font-size:13.5px; color:rgba(33,31,26,0.8); margin-top:8px;">Not set up yet.</div>
+  </div>
+</div>
+
 <script>
+  // =====================================================================
+  // Shared storage — backed by a Google Apps Script Web App bound to the
+  // community Google Sheet. ALL residents/devices read and write the SAME
+  // data through this endpoint, so admin edits are visible to everyone.
+  //
+  // Setup (one-time): in the Google Sheet, Extensions > Apps Script, paste
+  // the doGet/doPost script (see project notes), redeploy as a Web App
+  // ("Anyone" access), and confirm the URL below matches your deployment.
+  // =====================================================================
+  const STORAGE_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzy6895pl2dNKSsNZKBHWKu7J13hCzBpFTdD9Pjs5OTeEkL9iJwxBCjTOYvb2NZEqxm/exec";
+
+  window.storage = (function(){
+    async function apiGet(params){
+      const url = STORAGE_WEBAPP_URL + '?' + new URLSearchParams(params).toString();
+      const res = await fetch(url, { method: 'GET' });
+      return await res.json();
+    }
+    async function apiPost(body){
+      const res = await fetch(STORAGE_WEBAPP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight
+        body: JSON.stringify(body)
+      });
+      try { return await res.json(); } catch(e){ return { ok: true }; }
+    }
+    return {
+      async get(key, _shared){
+        try {
+          const data = await apiGet({ action: 'get', key });
+          return { value: (data && typeof data.value !== 'undefined') ? data.value : null };
+        } catch (err){
+          console.error('storage.get failed', key, err);
+          return { value: null };
+        }
+      },
+      async set(key, value, _shared){
+        try {
+          return await apiPost({ type: 'kv', action: 'set', key, value });
+        } catch (err){
+          console.error('storage.set failed', key, err);
+          return { ok: false };
+        }
+      },
+      async delete(key, _shared){
+        try {
+          return await apiPost({ type: 'kv', action: 'delete', key });
+        } catch (err){
+          console.error('storage.delete failed', key, err);
+          return { ok: false };
+        }
+      },
+      async list(prefix, _shared){
+        try {
+          const data = await apiGet({ action: 'list', prefix });
+          return { keys: (data && data.keys) ? data.keys : [] };
+        } catch (err){
+          console.error('storage.list failed', prefix, err);
+          return { keys: [] };
+        }
+      }
+    };
+  })();
+
   // Countdown to Independence Day event
   // Hero image carousel
   let currentSlide = 0;
@@ -777,14 +1212,17 @@
   }
 
   function updateCountdown(){
+    const daysLeftEl = document.getElementById('daysLeft');
+    const ringEl = document.getElementById('countdownRing');
+    if (!daysLeftEl || !ringEl) return; // no featured/countdown event card currently on the page
     const target = new Date('2026-08-15T00:00:00');
     const now = new Date();
     const diff = Math.ceil((target - now) / (1000*60*60*24));
     const days = diff > 0 ? diff : 0;
-    document.getElementById('daysLeft').textContent = days;
+    daysLeftEl.textContent = days;
     const pct = Math.max(0, Math.min(1, 1 - (days / 60))); // fills as date nears
     const deg = pct * 360;
-    document.getElementById('countdownRing').style.background =
+    ringEl.style.background =
       `conic-gradient(#e08a3c ${deg}deg, rgba(255,255,255,0.18) ${deg}deg)`;
   }
   updateCountdown();
@@ -987,13 +1425,62 @@
   });
 
   // --- Admin: password-gated view & export of registrations ---
-  const ADMIN_PASSWORD = "OnCloud33_2026"; // change this to your own password
+  const DEFAULT_ADMIN_PASSWORD = "OnCloud33"; // fallback if none saved yet in shared storage
+  const ADMIN_PASSWORD_KEY = "adminPassword:main";
+  const ADMIN_PASSWORD_LOG_PREFIX = "adminPasswordChangeLog:";
+
+  async function getAdminPassword(){
+    try {
+      const result = await window.storage.get(ADMIN_PASSWORD_KEY, true);
+      if (result && result.value) return result.value;
+    } catch (err){ console.error('Could not read admin password, using default', err); }
+    return DEFAULT_ADMIN_PASSWORD;
+  }
 
   const adminBackdrop = document.getElementById('adminBackdrop');
   const adminGate = document.getElementById('adminGate');
   const adminContent = document.getElementById('adminContent');
   const gateForm = document.getElementById('gateForm');
   const gateError = document.getElementById('gateError');
+  const changePassForm = document.getElementById('changePassForm');
+  const cpError = document.getElementById('cpError');
+  const cpSuccess = document.getElementById('cpSuccess');
+  const resetPassForm = document.getElementById('resetPassForm');
+  const rpError = document.getElementById('rpError');
+  const rpSuccess = document.getElementById('rpSuccess');
+  let currentCaptcha = '';
+  let currentAdminName = '';
+
+  // --- Shared activity log (writes to the "ActivityLog" tab of the same Google Sheet) ---
+  async function logToSheet(action, details){
+    try {
+      await fetch(STORAGE_WEBAPP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          type: 'log',
+          timestamp: new Date().toISOString(),
+          volunteer: currentAdminName || 'Unknown volunteer',
+          action: action,
+          details: details
+        })
+      });
+    } catch (err){ console.error('Could not write to shared Google Sheet log', err); }
+  }
+
+  function generateCaptcha(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no confusing O/0/I/1
+    let code = '';
+    for (let i = 0; i < 6; i++){
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  }
+  function regenerateCaptcha(){
+    currentCaptcha = generateCaptcha();
+    document.getElementById('captchaText').textContent = currentCaptcha;
+    document.getElementById('rpCaptcha').value = '';
+  }
 
   function openAdmin(){
     adminBackdrop.classList.add('open');
@@ -1002,6 +1489,16 @@
     adminContent.style.display = 'none';
     gateError.style.display = 'none';
     document.getElementById('adminPass').value = '';
+    document.getElementById('adminName').value = '';
+    changePassForm.style.display = 'none';
+    changePassForm.reset();
+    cpError.style.display = 'none';
+    cpSuccess.style.display = 'none';
+    resetPassForm.style.display = 'none';
+    resetPassForm.reset();
+    rpError.style.display = 'none';
+    rpSuccess.style.display = 'none';
+    regenerateCaptcha();
   }
   function closeAdmin(){
     adminBackdrop.classList.remove('open');
@@ -1011,18 +1508,106 @@
     if(e.target === adminBackdrop) closeAdmin();
   });
 
+  function toggleChangePassword(){
+    resetPassForm.style.display = 'none';
+    changePassForm.style.display = changePassForm.style.display === 'none' ? 'block' : 'none';
+  }
+  function toggleResetPassword(){
+    changePassForm.style.display = 'none';
+    const showing = resetPassForm.style.display === 'none';
+    resetPassForm.style.display = showing ? 'block' : 'none';
+    if (showing) regenerateCaptcha();
+  }
+
   gateForm.addEventListener('submit', async function(e){
     e.preventDefault();
+    const enteredName = document.getElementById('adminName').value.trim();
     const entered = document.getElementById('adminPass').value;
-    if (entered === ADMIN_PASSWORD){
+    const correctPassword = await getAdminPassword();
+    if (entered === correctPassword){
+      currentAdminName = enteredName || 'Unknown volunteer';
       gateError.style.display = 'none';
       adminGate.style.display = 'none';
       adminContent.style.display = 'block';
+      document.getElementById('loggedInAs').textContent = `Logged in as ${enteredName || 'a volunteer'} — manage registrations, events, and community inventory/funds.`;
       await loadRegistrations();
     } else {
       gateError.style.display = 'block';
     }
   });
+
+  changePassForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    cpError.style.display = 'none';
+    cpSuccess.style.display = 'none';
+    const requesterName = document.getElementById('cpName').value.trim();
+    const current1 = document.getElementById('cpCurrent1').value;
+    const current2 = document.getElementById('cpCurrent2').value;
+    const newPass = document.getElementById('cpNew').value;
+    const correctPassword = await getAdminPassword();
+
+    if (current1 !== current2){
+      cpError.textContent = 'The two entries of the current password do not match.';
+      cpError.style.display = 'block';
+      return;
+    }
+    if (current1 !== correctPassword){
+      cpError.textContent = 'Current password is incorrect.';
+      cpError.style.display = 'block';
+      return;
+    }
+    if (!newPass || newPass.length < 4){
+      cpError.textContent = 'New password must be at least 4 characters.';
+      cpError.style.display = 'block';
+      return;
+    }
+    try {
+      await window.storage.set(ADMIN_PASSWORD_KEY, newPass, true);
+      await logToSheet('Password changed', `Requested by ${requesterName || 'unknown'}`);
+      cpSuccess.textContent = 'Password updated. Please use the new password next time you log in.';
+      cpSuccess.style.display = 'block';
+      changePassForm.reset();
+    } catch (err){
+      console.error('Could not update password', err);
+      cpError.textContent = 'Could not save the new password. Please try again.';
+      cpError.style.display = 'block';
+    }
+  });
+
+  resetPassForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    rpError.style.display = 'none';
+    rpSuccess.style.display = 'none';
+    const requesterName = document.getElementById('rpName').value.trim();
+    const requesterFlat = document.getElementById('rpFlat').value.trim();
+    const enteredCaptcha = document.getElementById('rpCaptcha').value.trim().toUpperCase();
+
+    if (!requesterName || !requesterFlat){
+      rpError.textContent = 'Please enter your name and flat/tower number.';
+      rpError.style.display = 'block';
+      return;
+    }
+    if (enteredCaptcha !== currentCaptcha){
+      rpError.textContent = 'Verification code does not match. Please try again.';
+      rpError.style.display = 'block';
+      regenerateCaptcha();
+      return;
+    }
+    try {
+      await window.storage.set(ADMIN_PASSWORD_KEY, DEFAULT_ADMIN_PASSWORD, true);
+      currentAdminName = requesterName;
+      await logToSheet('Password reset', `Reset to default by ${requesterName} (Flat: ${requesterFlat})`);
+      rpSuccess.textContent = `Password reset to the default (${DEFAULT_ADMIN_PASSWORD}). Please log in again and consider changing it.`;
+      rpSuccess.style.display = 'block';
+      resetPassForm.reset();
+      regenerateCaptcha();
+    } catch (err){
+      console.error('Could not reset password', err);
+      rpError.textContent = 'Could not reset the password. Please try again.';
+      rpError.style.display = 'block';
+    }
+  });
+
 
   let cachedRegistrations = [];
 
@@ -1144,6 +1729,778 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
+
+  // --- Admin tabs ---
+  function switchAdminTab(tabId){
+    document.querySelectorAll('.admin-tab-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).style.display = 'block';
+    document.querySelector(`.admin-tab-btn[data-tab="${tabId}"]`).classList.add('active');
+  }
+
+  function escAttr(str){
+    return String(str == null ? '' : str).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  }
+
+  // --- Upcoming / Past events (admin-managed, shared storage) ---
+  const upcomingEventForm = document.getElementById('upcomingEventForm');
+  const pastEventForm = document.getElementById('pastEventForm');
+
+  upcomingEventForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entry = {
+      title: document.getElementById('ueTitle').value.trim(),
+      meta: document.getElementById('ueMeta').value.trim(),
+      desc: document.getElementById('ueDesc').value.trim(),
+      link: document.getElementById('ueLink').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+    if (!entry.title) return;
+    const key = 'upcomingEvent:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    await window.storage.set(key, JSON.stringify(entry), true);
+    await logToSheet('Upcoming event added', entry.title);
+    upcomingEventForm.reset();
+    await loadUpcomingEvents();
+  });
+
+  pastEventForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const linksRaw = document.getElementById('peLinks').value.trim();
+    const links = linksRaw ? linksRaw.split(',').map(pair => {
+      const [label, url] = pair.split('|').map(s => s && s.trim());
+      return { label: label || 'Link', url: url || '#' };
+    }) : [];
+    const entry = {
+      title: document.getElementById('peTitle').value.trim(),
+      meta: document.getElementById('peMeta').value.trim(),
+      desc: document.getElementById('peDesc').value.trim(),
+      links: links,
+      createdAt: new Date().toISOString()
+    };
+    if (!entry.title) return;
+    const key = 'pastEvent:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    await window.storage.set(key, JSON.stringify(entry), true);
+    await logToSheet('Past event added', entry.title);
+    pastEventForm.reset();
+    await loadPastEvents();
+  });
+
+  async function loadUpcomingEvents(){
+    const grid = document.querySelector('.events-grid');
+    const dyn = document.getElementById('dynamicUpcomingEvents');
+    const adminList = document.getElementById('upcomingEventList');
+    dyn.innerHTML = '';
+    adminList.innerHTML = '';
+    try {
+      const listResult = await window.storage.list('upcomingEvent:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+      const items = [];
+      for (const key of keys){
+        const result = await window.storage.get(key, true);
+        if (result && result.value) items.push({ key, entry: JSON.parse(result.value) });
+      }
+      items.sort((a,b) => new Date(a.entry.createdAt) - new Date(b.entry.createdAt));
+      items.forEach(({key, entry}) => {
+        const card = document.createElement('div');
+        card.className = 'event-card small';
+        card.innerHTML = `
+          <div class="eyebrow">Festival</div>
+          <h3>${escAttr(entry.title)}</h3>
+          <div class="meta">${escAttr(entry.meta)}</div>
+          <p>${escAttr(entry.desc)}</p>
+          ${entry.link ? `<a class="btn btn-primary btn-small" href="${escAttr(entry.link)}" target="_blank" rel="noopener">More info</a>` : ''}
+        `;
+        dyn.appendChild(card);
+
+        const row = document.createElement('div');
+        row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
+        row.innerHTML = `<span>${escAttr(entry.title)} — ${escAttr(entry.meta)}</span>`;
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-ghost btn-small';
+        delBtn.textContent = 'Remove';
+        delBtn.onclick = async () => { await window.storage.delete(key, true); await loadUpcomingEvents(); };
+        row.appendChild(delBtn);
+        adminList.appendChild(row);
+      });
+    } catch (err){ console.error('Could not load upcoming events', err); }
+  }
+
+  async function loadPastEvents(){
+    const dyn = document.getElementById('dynamicPastEvents');
+    const adminList = document.getElementById('pastEventList');
+    dyn.innerHTML = '';
+    adminList.innerHTML = '';
+    try {
+      const listResult = await window.storage.list('pastEvent:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+      const items = [];
+      for (const key of keys){
+        const result = await window.storage.get(key, true);
+        if (result && result.value) items.push({ key, entry: JSON.parse(result.value) });
+      }
+      items.sort((a,b) => new Date(a.entry.createdAt) - new Date(b.entry.createdAt));
+      items.forEach(({key, entry}) => {
+        const card = document.createElement('div');
+        card.className = 'event-card small past-card';
+        const linksHtml = (entry.links || []).map(l => `<a href="${escAttr(l.url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-small">${escAttr(l.label)}</a>`).join('');
+        card.innerHTML = `
+          <div class="eyebrow">${escAttr(entry.meta)}</div>
+          <h3>${escAttr(entry.title)}</h3>
+          <p>${escAttr(entry.desc)}</p>
+          <div class="past-links">${linksHtml}</div>
+        `;
+        dyn.appendChild(card);
+
+        const row = document.createElement('div');
+        row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
+        row.innerHTML = `<span>${escAttr(entry.title)} — ${escAttr(entry.meta)}</span>`;
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-ghost btn-small';
+        delBtn.textContent = 'Remove';
+        delBtn.onclick = async () => { await window.storage.delete(key, true); await loadPastEvents(); };
+        row.appendChild(delBtn);
+        adminList.appendChild(row);
+      });
+    } catch (err){ console.error('Could not load past events', err); }
+  }
+
+  loadUpcomingEvents();
+  loadPastEvents();
+
+  // --- Custom columns support (Assets & Cash trackers) ---
+  const ASSET_COLUMNS_KEY = 'assetColumns:main';
+  const CASH_COLUMNS_KEY = 'cashColumns:main';
+  let assetCustomColumns = [];
+  let cashCustomColumns = [];
+
+  function slugifyColumn(name){
+    return 'cf_' + name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  }
+
+  async function loadCustomColumns(storageKey){
+    try {
+      const result = await window.storage.get(storageKey, true);
+      if (result && result.value) return JSON.parse(result.value);
+    } catch (err){ console.error('Could not load custom columns', err); }
+    return [];
+  }
+  async function saveCustomColumns(storageKey, columns){
+    await window.storage.set(storageKey, JSON.stringify(columns), true);
+  }
+
+  function renderCustomFieldInputs(container, columns, prefix){
+    container.innerHTML = '';
+    columns.forEach(col => {
+      const wrap = document.createElement('div');
+      const inputId = prefix + col.id;
+      wrap.innerHTML = `<label for="${inputId}">${escAttr(col.label)}</label><input type="text" id="${inputId}" placeholder="Enter ${escAttr(col.label)}">`;
+      container.appendChild(wrap);
+    });
+  }
+
+  function renderColumnManagerList(listEl, columns, storageKey, onChange){
+    listEl.innerHTML = '';
+    if (columns.length === 0){
+      listEl.innerHTML = '<p class="sub" style="margin:0;">No custom columns added yet.</p>';
+      return;
+    }
+    columns.forEach((col, idx) => {
+      const row = document.createElement('div');
+      row.style = 'display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--line); font-size:13px;';
+      row.innerHTML = `<span>${escAttr(col.label)}</span>`;
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn btn-ghost btn-small';
+      delBtn.textContent = 'Remove';
+      delBtn.onclick = async () => {
+        columns.splice(idx, 1);
+        await saveCustomColumns(storageKey, columns);
+        onChange();
+      };
+      row.appendChild(delBtn);
+      listEl.appendChild(row);
+    });
+  }
+
+  const assetColumnForm = document.getElementById('assetColumnForm');
+  assetColumnForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const nameInput = document.getElementById('assetColumnName');
+    const label = nameInput.value.trim();
+    if (!label) return;
+    assetCustomColumns.push({ id: slugifyColumn(label), label });
+    await saveCustomColumns(ASSET_COLUMNS_KEY, assetCustomColumns);
+    nameInput.value = '';
+    await refreshAssetColumnsUI();
+  });
+
+  const cashColumnForm = document.getElementById('cashColumnForm');
+  cashColumnForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const nameInput = document.getElementById('cashColumnName');
+    const label = nameInput.value.trim();
+    if (!label) return;
+    cashCustomColumns.push({ id: slugifyColumn(label), label });
+    await saveCustomColumns(CASH_COLUMNS_KEY, cashCustomColumns);
+    nameInput.value = '';
+    await refreshCashColumnsUI();
+  });
+
+  async function refreshAssetColumnsUI(){
+    renderCustomFieldInputs(document.getElementById('assetCustomFields'), assetCustomColumns, 'ascf_');
+    renderColumnManagerList(document.getElementById('assetColumnList'), assetCustomColumns, ASSET_COLUMNS_KEY, refreshAssetColumnsUI);
+    renderAssetsDetailHeader();
+  }
+  async function refreshCashColumnsUI(){
+    renderCustomFieldInputs(document.getElementById('cashCustomFields'), cashCustomColumns, 'cscf_');
+    renderColumnManagerList(document.getElementById('cashColumnList'), cashCustomColumns, CASH_COLUMNS_KEY, refreshCashColumnsUI);
+    renderCashDetailHeader();
+  }
+
+  function renderAssetsDetailHeader(){
+    const row = document.getElementById('assetsDetailHeaderRow');
+    // remove any previously-added custom header cells
+    row.querySelectorAll('th[data-custom]').forEach(th => th.remove());
+    const linkTh = document.createElement('th');
+    linkTh.style.padding = '8px 6px';
+    linkTh.textContent = 'Link';
+    linkTh.setAttribute('data-custom', '1');
+    assetCustomColumns.forEach(col => {
+      const th = document.createElement('th');
+      th.style.padding = '8px 6px';
+      th.textContent = col.label;
+      th.setAttribute('data-custom', '1');
+      row.appendChild(th);
+    });
+    row.appendChild(linkTh);
+  }
+  function renderCashDetailHeader(){
+    const row = document.getElementById('cashDetailHeaderRow');
+    row.querySelectorAll('th[data-custom]').forEach(th => th.remove());
+    const linkTh = document.createElement('th');
+    linkTh.style.padding = '8px 6px';
+    linkTh.textContent = 'Link';
+    linkTh.setAttribute('data-custom', '1');
+    cashCustomColumns.forEach(col => {
+      const th = document.createElement('th');
+      th.style.padding = '8px 6px';
+      th.textContent = col.label;
+      th.setAttribute('data-custom', '1');
+      row.appendChild(th);
+    });
+    row.appendChild(linkTh);
+  }
+
+  // --- Inventory: Assets ---
+  const assetForm = document.getElementById('assetForm');
+  assetForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entry = {
+      name: document.getElementById('asName').value.trim(),
+      category: document.getElementById('asCategory').value.trim(),
+      qty: document.getElementById('asQty').value.trim(),
+      cost: document.getElementById('asCost').value.trim(),
+      event: document.getElementById('asEvent').value.trim(),
+      date: document.getElementById('asDate').value.trim(),
+      custodian: document.getElementById('asCustodian').value.trim(),
+      location: document.getElementById('asLocation').value.trim(),
+      condition: document.getElementById('asCondition').value.trim(),
+      handover: document.getElementById('asHandover').value,
+      remarks: document.getElementById('asRemarks').value.trim(),
+      link: document.getElementById('asLink').value.trim(),
+      custom: {},
+      createdAt: new Date().toISOString()
+    };
+    assetCustomColumns.forEach(col => {
+      const el = document.getElementById('ascf_' + col.id);
+      if (el) entry.custom[col.id] = el.value.trim();
+    });
+    if (!entry.name) return;
+    const key = 'asset:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    await window.storage.set(key, JSON.stringify(entry), true);
+    await logToSheet('Asset added', `${entry.name} (Qty: ${entry.qty}, Event: ${entry.event})`);
+    assetForm.reset();
+    await loadAssets();
+  });
+
+  let cachedAssets = [];
+  async function loadAssets(){
+    cachedAssets = [];
+    const adminList = document.getElementById('assetAdminList');
+    if (adminList) adminList.innerHTML = '';
+    try {
+      const listResult = await window.storage.list('asset:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+      for (const key of keys){
+        const result = await window.storage.get(key, true);
+        if (result && result.value) cachedAssets.push({ key, entry: JSON.parse(result.value) });
+      }
+      cachedAssets.sort((a,b) => new Date(a.entry.createdAt) - new Date(b.entry.createdAt));
+
+      const totalQty = cachedAssets.reduce((sum, {entry}) => sum + (parseFloat(entry.qty) || 0), 0);
+      const summaryEl = document.getElementById('assetsSummaryText');
+      if (summaryEl){
+        summaryEl.textContent = cachedAssets.length === 0
+          ? 'No assets recorded yet.'
+          : `${cachedAssets.length} asset type(s), ${totalQty || cachedAssets.length} item(s) in community storage.`;
+      }
+
+      if (adminList){
+        cachedAssets.forEach(({key, entry}) => {
+          const row = document.createElement('div');
+          row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
+          row.innerHTML = `<span>${escAttr(entry.name)} (${escAttr(entry.qty)}) — ${escAttr(entry.event)}</span>`;
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn btn-ghost btn-small';
+          delBtn.textContent = 'Remove';
+          delBtn.onclick = async () => { await window.storage.delete(key, true); await loadAssets(); };
+          row.appendChild(delBtn);
+          adminList.appendChild(row);
+        });
+      }
+    } catch (err){ console.error('Could not load assets', err); }
+  }
+
+  function openAssetsDetail(){
+    const backdrop = document.getElementById('assetsDetailBackdrop');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderAssetsDetail();
+  }
+  function closeAssetsDetail(){
+    document.getElementById('assetsDetailBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('assetsDetailBackdrop').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('assetsDetailBackdrop')) closeAssetsDetail();
+  });
+
+  function renderAssetsDetail(){
+    renderAssetsDetailHeader();
+    const tbody = document.getElementById('assetsDetailTableBody');
+    const empty = document.getElementById('assetsDetailEmpty');
+    tbody.innerHTML = '';
+    if (cachedAssets.length === 0){ empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    cachedAssets.forEach(({entry}) => {
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = '1px solid var(--line)';
+      let customCells = '';
+      assetCustomColumns.forEach(col => {
+        const val = (entry.custom && entry.custom[col.id]) || '';
+        customCells += `<td style="padding:8px 6px;">${escAttr(val)}</td>`;
+      });
+      const linkCell = entry.link
+        ? `<td style="padding:8px 6px;"><a href="${escAttr(entry.link)}" target="_blank" rel="noopener">View</a></td>`
+        : `<td style="padding:8px 6px;">—</td>`;
+      tr.innerHTML = `
+        <td style="padding:8px 6px;">${escAttr(entry.name)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.category)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.qty)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.cost)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.event)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.date)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.custodian)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.location)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.condition)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.handover)}</td>
+        ${customCells}
+        ${linkCell}
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // --- Inventory: Cash ---
+  const cashForm = document.getElementById('cashForm');
+  cashForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entry = {
+      type: document.getElementById('csType').value,
+      date: document.getElementById('csDate').value.trim(),
+      desc: document.getElementById('csDesc').value.trim(),
+      amount: document.getElementById('csAmount').value.trim(),
+      mode: document.getElementById('csMode').value.trim(),
+      party: document.getElementById('csParty').value.trim(),
+      link: document.getElementById('csLink').value.trim(),
+      custom: {},
+      createdAt: new Date().toISOString()
+    };
+    cashCustomColumns.forEach(col => {
+      const el = document.getElementById('cscf_' + col.id);
+      if (el) entry.custom[col.id] = el.value.trim();
+    });
+    if (!entry.desc || !entry.amount) return;
+    const key = 'cash:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    await window.storage.set(key, JSON.stringify(entry), true);
+    await logToSheet('Cash entry added', `${entry.type}: ${entry.desc} — ₹${entry.amount}`);
+    cashForm.reset();
+    await loadCash();
+  });
+
+  let cachedCash = [];
+  async function loadCash(){
+    cachedCash = [];
+    const adminList = document.getElementById('cashAdminList');
+    if (adminList) adminList.innerHTML = '';
+    try {
+      const listResult = await window.storage.list('cash:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+      for (const key of keys){
+        const result = await window.storage.get(key, true);
+        if (result && result.value) cachedCash.push({ key, entry: JSON.parse(result.value) });
+      }
+      cachedCash.sort((a,b) => new Date(a.entry.createdAt) - new Date(b.entry.createdAt));
+
+      let inflow = 0, outflow = 0;
+      cachedCash.forEach(({entry}) => {
+        const amt = parseFloat(entry.amount) || 0;
+        if (entry.type === 'Outflow') outflow += amt; else inflow += amt;
+      });
+      const balance = inflow - outflow;
+
+      const summaryEl = document.getElementById('cashSummaryText');
+      if (summaryEl){
+        summaryEl.textContent = cachedCash.length === 0
+          ? 'No cash entries recorded yet.'
+          : `₹${balance.toLocaleString('en-IN')} available (₹${inflow.toLocaleString('en-IN')} collected, ₹${outflow.toLocaleString('en-IN')} spent).`;
+      }
+
+      if (adminList){
+        cachedCash.forEach(({key, entry}) => {
+          const row = document.createElement('div');
+          row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
+          row.innerHTML = `<span>${escAttr(entry.type)}: ${escAttr(entry.desc)} — ₹${escAttr(entry.amount)}</span>`;
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn btn-ghost btn-small';
+          delBtn.textContent = 'Remove';
+          delBtn.onclick = async () => { await window.storage.delete(key, true); await loadCash(); };
+          row.appendChild(delBtn);
+          adminList.appendChild(row);
+        });
+      }
+    } catch (err){ console.error('Could not load cash entries', err); }
+  }
+
+  function openCashDetail(){
+    const backdrop = document.getElementById('cashDetailBackdrop');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderCashDetail();
+  }
+  function closeCashDetail(){
+    document.getElementById('cashDetailBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('cashDetailBackdrop').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('cashDetailBackdrop')) closeCashDetail();
+  });
+
+  function renderCashDetail(){
+    renderCashDetailHeader();
+    const tbody = document.getElementById('cashDetailTableBody');
+    const empty = document.getElementById('cashDetailEmpty');
+    tbody.innerHTML = '';
+    let inflow = 0, outflow = 0;
+    cachedCash.forEach(({entry}) => {
+      const amt = parseFloat(entry.amount) || 0;
+      if (entry.type === 'Outflow') outflow += amt; else inflow += amt;
+    });
+    document.getElementById('cashTotalInflow').textContent = `Inflow: ₹${inflow.toLocaleString('en-IN')}`;
+    document.getElementById('cashTotalOutflow').textContent = `Outflow: ₹${outflow.toLocaleString('en-IN')}`;
+    document.getElementById('cashBalance').textContent = `Balance: ₹${(inflow - outflow).toLocaleString('en-IN')}`;
+
+    if (cachedCash.length === 0){ empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    cachedCash.forEach(({entry}) => {
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = '1px solid var(--line)';
+      let customCells = '';
+      cashCustomColumns.forEach(col => {
+        const val = (entry.custom && entry.custom[col.id]) || '';
+        customCells += `<td style="padding:8px 6px;">${escAttr(val)}</td>`;
+      });
+      const linkCell = entry.link
+        ? `<td style="padding:8px 6px;"><a href="${escAttr(entry.link)}" target="_blank" rel="noopener">View</a></td>`
+        : `<td style="padding:8px 6px;">—</td>`;
+      tr.innerHTML = `
+        <td style="padding:8px 6px;">${escAttr(entry.type)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.date)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.desc)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.amount)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.mode)}</td>
+        <td style="padding:8px 6px;">${escAttr(entry.party)}</td>
+        ${customCells}
+        ${linkCell}
+      `;
+      tbody.appendChild(tr);
+    });
+
+    loadAccountDetails();
+  }
+
+  // --- Holding account details ---
+  const accountForm = document.getElementById('accountForm');
+  accountForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entry = {
+      bank: document.getElementById('acBank').value.trim(),
+      number: document.getElementById('acNumber').value.trim(),
+      ifsc: document.getElementById('acIfsc').value.trim(),
+      custodian: document.getElementById('acCustodian').value.trim(),
+      notes: document.getElementById('acNotes').value.trim()
+    };
+    await window.storage.set('cashAccount:main', JSON.stringify(entry), true);
+    await logToSheet('Holding account updated', `Bank: ${entry.bank}, A/c: ${entry.number}`);
+    alert('Holding account details saved.');
+  });
+
+  async function loadAccountDetails(){
+    try {
+      const result = await window.storage.get('cashAccount:main', true);
+      const el = document.getElementById('cashAccountDetails');
+      if (result && result.value){
+        const acc = JSON.parse(result.value);
+        el.innerHTML = `
+          <div><strong>Bank:</strong> ${escAttr(acc.bank) || '—'}</div>
+          <div><strong>Account number:</strong> ${escAttr(acc.number) || '—'}</div>
+          <div><strong>IFSC:</strong> ${escAttr(acc.ifsc) || '—'}</div>
+          <div><strong>Custodian(s):</strong> ${escAttr(acc.custodian) || '—'}</div>
+          ${acc.notes ? `<div><strong>Notes:</strong> ${escAttr(acc.notes)}</div>` : ''}
+        `;
+      }
+    } catch (err){ console.error('Could not load account details', err); }
+  }
+
+  async function initInventory(){
+    assetCustomColumns = await loadCustomColumns(ASSET_COLUMNS_KEY);
+    cashCustomColumns = await loadCustomColumns(CASH_COLUMNS_KEY);
+    await refreshAssetColumnsUI();
+    await refreshCashColumnsUI();
+    await loadAssets();
+    await loadCash();
+  }
+  initInventory();
+
+  // --- Custom sections (publish anywhere, top or bottom, no code changes) ---
+  const customSectionForm = document.getElementById('customSectionForm');
+  customSectionForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const linksRaw = document.getElementById('csecLinks').value.trim();
+    const links = linksRaw ? linksRaw.split(',').map(pair => {
+      const [label, url] = pair.split('|').map(s => s && s.trim());
+      return { label: label || 'Link', url: url || '#' };
+    }) : [];
+    const entry = {
+      title: document.getElementById('csecTitle').value.trim(),
+      position: document.getElementById('csecPosition').value,
+      body: document.getElementById('csecBody').value.trim(),
+      links: links,
+      createdAt: new Date().toISOString()
+    };
+    if (!entry.title) return;
+    const key = 'customSection:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    await window.storage.set(key, JSON.stringify(entry), true);
+    await logToSheet('Custom section published', `${entry.title} (${entry.position})`);
+    customSectionForm.reset();
+    await loadCustomSections();
+  });
+
+  async function loadCustomSections(){
+    const topEl = document.getElementById('dynamicSectionsTop');
+    const bottomEl = document.getElementById('dynamicSectionsBottom');
+    const adminList = document.getElementById('customSectionList');
+    topEl.innerHTML = '';
+    bottomEl.innerHTML = '';
+    adminList.innerHTML = '';
+    try {
+      const listResult = await window.storage.list('customSection:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+      const items = [];
+      for (const key of keys){
+        const result = await window.storage.get(key, true);
+        if (result && result.value) items.push({ key, entry: JSON.parse(result.value) });
+      }
+      items.sort((a,b) => new Date(a.entry.createdAt) - new Date(b.entry.createdAt));
+      items.forEach(({key, entry}) => {
+        const section = document.createElement('section');
+        section.className = 'custom-section';
+        section.style = 'padding:56px 28px;';
+        const linksHtml = (entry.links || []).map(l => `<a href="${escAttr(l.url)}" target="_blank" rel="noopener" class="btn btn-primary btn-small" style="margin-right:8px;">${escAttr(l.label)}</a>`).join('');
+        section.innerHTML = `
+          <div class="wrap">
+            <div class="eyebrow">Announcement</div>
+            <h2 style="margin-top:6px;">${escAttr(entry.title)}</h2>
+            <p style="margin-top:10px; max-width:640px;">${escAttr(entry.body)}</p>
+            <div style="margin-top:14px;">${linksHtml}</div>
+          </div>
+        `;
+        if (entry.position === 'top') topEl.appendChild(section);
+        else bottomEl.appendChild(section);
+
+        const row = document.createElement('div');
+        row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
+        row.innerHTML = `<span>${escAttr(entry.title)} (${escAttr(entry.position)})</span>`;
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-ghost btn-small';
+        delBtn.textContent = 'Remove';
+        delBtn.onclick = async () => { await window.storage.delete(key, true); await loadCustomSections(); };
+        row.appendChild(delBtn);
+        adminList.appendChild(row);
+      });
+    } catch (err){ console.error('Could not load custom sections', err); }
+  }
+  loadCustomSections();
+
+  // --- Our Story (resident-facing pop-up, admin-editable) ---
+  const STORY_KEY = 'ourStory:main';
+  const DEFAULT_STORY_TITLE = 'Our story';
+  const DEFAULT_STORY_BODY = `OnCloud 33 is no longer just a promise on paper — it's becoming home. With 1,200+ units already handed over and residents from 3 of 5 towers having moved in and started living, the sound of daily life — kids playing, neighbours meeting in the lobby, evening walks around the block — has begun filling spaces that were once just blueprints. A fourth tower has now also begun its handover process, bringing even more families a step closer to calling OnCloud 33 home.
+
+Amenities: half-way there, and counting
+Out of the 102 planned amenities, 52 are already fully functional — giving residents real, everyday access to shared spaces even this early in the community's life. The remaining amenities are on track to come alive over the next 30–45 days, rounding out the full experience OnCloud 33 promises: recreation, wellness, and community spaces designed for every age and interest.
+
+Built by residents, for residents
+What makes OnCloud 33 different in this early chapter is who's been shaping it. With no formal committee or association yet in place, it's been a small group of resident volunteers stepping up — engaging directly with the builder to resolve day-to-day issues, and bringing the community together through shared celebration. This year alone, volunteers organized:
+
+• Independence Day (15th August) — a flag hoisting ceremony and cultural celebration that brought together residents from across the towers, many meeting each other for the first time.
+• Ganesh Chaturthi Mahotsav — days of aarti, community gathering, and shared devotion, funded and run entirely by resident contributions.
+
+Every rupee collected for these celebrations, and every asset purchased with it — from the shamiana to the sound system — is being tracked transparently, ready to be handed over intact to the association once it's formally constituted.
+
+What's next
+As more towers complete handover and the remaining amenities switch on over the coming weeks, OnCloud 33 is steadily transforming from a construction milestone into a living, self-organizing community — one where residents aren't just waiting for a committee to arrive, but are already building the culture that committee will one day inherit.`;
+
+  function openStory(){
+    const backdrop = document.getElementById('storyBackdrop');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderStory();
+  }
+  function closeStory(){
+    document.getElementById('storyBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('storyBackdrop').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('storyBackdrop')) closeStory();
+  });
+
+  async function renderStory(){
+    try {
+      const result = await window.storage.get(STORY_KEY, true);
+      let title = DEFAULT_STORY_TITLE, body = DEFAULT_STORY_BODY, updatedAt = '';
+      if (result && result.value){
+        const data = JSON.parse(result.value);
+        title = data.title || DEFAULT_STORY_TITLE;
+        body = data.body || DEFAULT_STORY_BODY;
+        updatedAt = data.updatedAt || '';
+      }
+      document.getElementById('storyTitle').textContent = title;
+      document.getElementById('storyBody').textContent = body;
+      document.getElementById('storyUpdatedAt').textContent = updatedAt
+        ? `Last updated ${new Date(updatedAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}`
+        : '';
+    } catch (err){ console.error('Could not load story', err); }
+  }
+
+  const storyForm = document.getElementById('storyForm');
+  storyForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entry = {
+      title: document.getElementById('stTitle').value.trim() || DEFAULT_STORY_TITLE,
+      body: document.getElementById('stBody').value.trim(),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentAdminName || 'Unknown volunteer'
+    };
+    if (!entry.body) return;
+    await window.storage.set(STORY_KEY, JSON.stringify(entry), true);
+    await logToSheet('Our story updated', `New length: ${entry.body.length} chars`);
+    document.getElementById('storySavedMsg').style.display = 'block';
+    setTimeout(() => { document.getElementById('storySavedMsg').style.display = 'none'; }, 3000);
+  });
+
+  async function loadStoryIntoAdminForm(){
+    try {
+      const result = await window.storage.get(STORY_KEY, true);
+      if (result && result.value){
+        const data = JSON.parse(result.value);
+        document.getElementById('stTitle').value = data.title || DEFAULT_STORY_TITLE;
+        document.getElementById('stBody').value = data.body || '';
+      } else {
+        document.getElementById('stTitle').value = DEFAULT_STORY_TITLE;
+      }
+    } catch (err){ console.error('Could not preload story into admin form', err); }
+  }
+  loadStoryIntoAdminForm();
+
+  // --- Announcements (admin-posted, last 3 shown to all residents) ---
+  const announcementForm = document.getElementById('announcementForm');
+  announcementForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const entry = {
+      title: document.getElementById('anTitle').value.trim(),
+      body: document.getElementById('anBody').value.trim(),
+      createdAt: new Date().toISOString(),
+      postedBy: currentAdminName || 'Unknown volunteer'
+    };
+    if (!entry.title) return;
+    const key = 'announcement:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    await window.storage.set(key, JSON.stringify(entry), true);
+    await logToSheet('Announcement posted', entry.title);
+    announcementForm.reset();
+    await loadAnnouncements();
+  });
+
+  async function loadAnnouncements(){
+    const listEl = document.getElementById('announcementsList');
+    const adminList = document.getElementById('announcementAdminList');
+    const section = document.getElementById('announcements');
+    listEl.innerHTML = '';
+    adminList.innerHTML = '';
+    try {
+      const listResult = await window.storage.list('announcement:', true);
+      const keys = (listResult && listResult.keys) ? listResult.keys : [];
+      const items = [];
+      for (const key of keys){
+        const result = await window.storage.get(key, true);
+        if (result && result.value) items.push({ key, entry: JSON.parse(result.value) });
+      }
+      items.sort((a,b) => new Date(b.entry.createdAt) - new Date(a.entry.createdAt)); // newest first
+
+      if (items.length === 0){
+        section.style.display = 'none';
+      } else {
+        section.style.display = 'block';
+        items.slice(0, 3).forEach(({entry}) => {
+          const row = document.createElement('div');
+          row.className = 'announcement-item';
+          const dateStr = new Date(entry.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+          row.innerHTML = `
+            <div>
+              <div class="a-title">${escAttr(entry.title)}</div>
+              <div class="a-body">${escAttr(entry.body)}</div>
+            </div>
+            <div class="a-date">${dateStr}</div>
+          `;
+          listEl.appendChild(row);
+        });
+      }
+
+      // Admin management list shows ALL announcements (with delete)
+      items.forEach(({key, entry}) => {
+        const row = document.createElement('div');
+        row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
+        row.innerHTML = `<span>${escAttr(entry.title)}</span>`;
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-ghost btn-small';
+        delBtn.textContent = 'Remove';
+        delBtn.onclick = async () => { await window.storage.delete(key, true); await loadAnnouncements(); };
+        row.appendChild(delBtn);
+        adminList.appendChild(row);
+      });
+    } catch (err){ console.error('Could not load announcements', err); }
+  }
+  loadAnnouncements();
+
 </script>
 
 </body>
