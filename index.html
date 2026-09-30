@@ -474,6 +474,9 @@
   <div class="wrap">
     <div class="eyebrow">📣 Announcements</div>
     <div id="announcementsList" style="margin-top:10px;"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-ghost btn-small" onclick="openSubscribeModal()">🔔 Subscribe to updates by email</button>
+    </div>
   </div>
 </section>
 
@@ -697,6 +700,7 @@
     </div>
     <div>
       <div>OnCloud33 Volunteer Committee</div>
+      <button type="button" class="btn btn-ghost btn-small" style="margin-top:10px;" onclick="openSubscribeModal()">🔔 Subscribe to updates by email</button>
     </div>
     <div>
       <span style="opacity:0.7;">Organizers: registration data is in the linked Google Sheet (share access from Google Forms → Responses).</span>
@@ -712,6 +716,45 @@
     <h3 id="storyTitle">Our story</h3>
     <div id="storyBody" style="margin-top:14px; font-size:14.5px; line-height:1.7; color:rgba(33,31,26,0.85);"></div>
     <p id="storyUpdatedAt" style="margin-top:18px; font-size:12px; color:rgba(33,31,26,0.5);"></p>
+  </div>
+</div>
+
+<!-- SUBSCRIBE TO UPDATES MODAL -->
+<div class="modal-backdrop" id="subscribeBackdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSubscribeModal()" aria-label="Close">✕</button>
+    <div id="subscribeFormView">
+      <div class="eyebrow">Stay in the loop</div>
+      <h3>Subscribe to updates by email</h3>
+      <p class="sub">Choose what you'd like to be notified about. You can unsubscribe anytime by submitting this form again with "Unsubscribe".</p>
+      <form id="subscribeForm">
+        <div>
+          <label for="subEmail">Email address</label>
+          <input type="email" id="subEmail" required placeholder="you@example.com">
+        </div>
+        <div>
+          <label for="subName">Name (optional)</label>
+          <input type="text" id="subName" placeholder="Your name">
+        </div>
+        <div>
+          <label for="subPreference">Notify me about</label>
+          <select id="subPreference">
+            <option value="announcements">Announcements only</option>
+            <option value="all">All updates (announcements, events, inventory/funds changes)</option>
+          </select>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+          <button type="button" class="btn btn-ghost" onclick="submitUnsubscribe()">Unsubscribe this email</button>
+        </div>
+      </form>
+    </div>
+    <div id="subscribeSuccessView" style="display:none;">
+      <div class="eyebrow">Done</div>
+      <h3 id="subscribeSuccessTitle">Subscribed!</h3>
+      <p class="sub" id="subscribeSuccessMsg">You'll now receive email updates.</p>
+      <div class="submit-row"><button class="btn btn-primary" onclick="closeSubscribeModal()">Close</button></div>
+    </div>
   </div>
 </div>
 
@@ -982,6 +1025,9 @@
           </div>
         </form>
         <div id="upcomingEventList" style="margin-top:14px;"></div>
+        <div class="submit-row" style="margin-top:10px;">
+          <button type="button" class="btn btn-ghost btn-small" onclick="downloadUpcomingEventsCSV()">Download upcoming events (CSV)</button>
+        </div>
 
         <h3 style="font-size:18px; margin-top:28px;">Add / update a past event</h3>
         <form id="pastEventForm" autocomplete="off">
@@ -1010,29 +1056,36 @@
           </div>
         </form>
         <div id="pastEventList" style="margin-top:14px;"></div>
+        <div class="submit-row" style="margin-top:10px;">
+          <button type="button" class="btn btn-ghost btn-small" onclick="downloadPastEventsCSV()">Download past events (CSV)</button>
+        </div>
       </div>
 
       <div id="tab-inventory" class="admin-tab-panel" style="margin-top:20px; display:none;">
         <h3 style="font-size:18px;">Add an asset</h3>
         <form id="assetForm">
-          <div class="field-row">
-            <div><label for="asName">Asset name</label><input type="text" id="asName" required placeholder="e.g. PA Sound System"></div>
-            <div><label for="asCategory">Category</label><input type="text" id="asCategory" required placeholder="e.g. Sound & Electronics"></div>
+          <div>
+            <label for="asSelect">Select asset to update (or leave as "Add new" to create one)</label>
+            <select id="asSelect"><option value="">+ Add new asset</option></select>
           </div>
           <div class="field-row">
-            <div><label for="asQty">Quantity</label><input type="text" id="asQty" required placeholder="e.g. 1"></div>
-            <div><label for="asCost">Total cost (INR)</label><input type="text" id="asCost" required placeholder="e.g. 22000"></div>
+            <div><label for="asName">Asset name</label><input type="text" id="asName" required autocomplete="off" placeholder="e.g. PA Sound System"></div>
+            <div><label for="asCategory">Category</label><input type="text" id="asCategory" required autocomplete="off" placeholder="e.g. Sound & Electronics"></div>
           </div>
           <div class="field-row">
-            <div><label for="asEvent">Event/Occasion</label><input type="text" id="asEvent" required placeholder="e.g. Independence Day 2026"></div>
-            <div><label for="asDate">Purchase date</label><input type="text" id="asDate" placeholder="DD-MM-YYYY"></div>
+            <div><label for="asQty">Quantity</label><input type="text" id="asQty" required autocomplete="off" placeholder="e.g. 1"></div>
+            <div><label for="asCost">Total cost (INR)</label><input type="text" id="asCost" required autocomplete="off" placeholder="e.g. 22000"></div>
           </div>
           <div class="field-row">
-            <div><label for="asCustodian">Custodian</label><input type="text" id="asCustodian" placeholder="Responsible volunteer"></div>
-            <div><label for="asLocation">Storage location</label><input type="text" id="asLocation" placeholder="e.g. Clubhouse store room"></div>
+            <div><label for="asEvent">Event/Occasion</label><input type="text" id="asEvent" required autocomplete="off" placeholder="e.g. Independence Day 2026"></div>
+            <div><label for="asDate">Purchase date</label><input type="text" id="asDate" autocomplete="off" placeholder="DD-MM-YYYY"></div>
           </div>
           <div class="field-row">
-            <div><label for="asCondition">Condition</label><input type="text" id="asCondition" placeholder="e.g. New"></div>
+            <div><label for="asCustodian">Custodian</label><input type="text" id="asCustodian" autocomplete="off" placeholder="Responsible volunteer"></div>
+            <div><label for="asLocation">Storage location</label><input type="text" id="asLocation" autocomplete="off" placeholder="e.g. Clubhouse store room"></div>
+          </div>
+          <div class="field-row">
+            <div><label for="asCondition">Condition</label><input type="text" id="asCondition" autocomplete="off" placeholder="e.g. New"></div>
             <div>
               <label for="asHandover">Handover status</label>
               <select id="asHandover">
@@ -1042,8 +1095,8 @@
             </div>
           </div>
           <div class="field-row">
-            <div><label for="asRemarks">Remarks</label><input type="text" id="asRemarks" placeholder="Optional notes"></div>
-            <div><label for="asLink">Reference link (bill/photo/invoice — optional)</label><input type="text" id="asLink" placeholder="https://..."></div>
+            <div><label for="asRemarks">Remarks</label><input type="text" id="asRemarks" autocomplete="off" placeholder="Optional notes"></div>
+            <div><label for="asLink">Reference link (bill/photo/invoice — optional)</label><input type="text" id="asLink" autocomplete="off" placeholder="https://..."></div>
           </div>
           <div>
             <label for="asPhoto">Photo (optional) — stored in Google Drive</label>
@@ -1055,9 +1108,15 @@
             </div>
           </div>
           <div id="assetCustomFields"></div>
-          <div class="submit-row"><button type="submit" class="btn btn-primary">Add asset</button></div>
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary" id="asSubmitBtn">Add asset</button>
+            <button type="button" class="btn btn-ghost" id="asCancelEditBtn" style="display:none;" onclick="resetAssetForm()">Cancel edit</button>
+          </div>
         </form>
         <div id="assetAdminList" style="margin-top:14px;"></div>
+        <div class="submit-row" style="margin-top:10px;">
+          <button type="button" class="btn btn-ghost btn-small" onclick="downloadAssetsCSV()">Download assets (CSV)</button>
+        </div>
 
         <details style="margin-top:20px;">
           <summary style="cursor:pointer; font-size:13.5px; font-weight:600;">⚙️ Manage asset tracker columns</summary>
@@ -1073,21 +1132,25 @@
 
         <h3 style="font-size:18px; margin-top:28px;">Add a cash entry</h3>
         <form id="cashForm">
+          <div>
+            <label for="csSelect">Select entry to update (or leave as "Add new" to create one)</label>
+            <select id="csSelect"><option value="">+ Add new cash entry</option></select>
+          </div>
           <div class="field-row">
             <div>
               <label for="csType">Type</label>
               <select id="csType"><option>Inflow</option><option>Outflow</option></select>
             </div>
-            <div><label for="csDate">Date</label><input type="text" id="csDate" placeholder="DD-MM-YYYY"></div>
+            <div><label for="csDate">Date</label><input type="text" id="csDate" autocomplete="off" placeholder="DD-MM-YYYY"></div>
           </div>
-          <div><label for="csDesc">Description</label><input type="text" id="csDesc" required placeholder="e.g. Resident contribution / Tent house payment"></div>
+          <div><label for="csDesc">Description</label><input type="text" id="csDesc" required autocomplete="off" placeholder="e.g. Resident contribution / Tent house payment"></div>
           <div class="field-row">
-            <div><label for="csAmount">Amount (INR)</label><input type="text" id="csAmount" required placeholder="e.g. 15000"></div>
-            <div><label for="csMode">Payment mode</label><input type="text" id="csMode" placeholder="e.g. UPI / Cash / Bank Transfer"></div>
+            <div><label for="csAmount">Amount (INR)</label><input type="text" id="csAmount" required autocomplete="off" placeholder="e.g. 15000"></div>
+            <div><label for="csMode">Payment mode</label><input type="text" id="csMode" autocomplete="off" placeholder="e.g. UPI / Cash / Bank Transfer"></div>
           </div>
           <div class="field-row">
-            <div><label for="csParty">Paid by / Paid to</label><input type="text" id="csParty" placeholder="Resident / vendor name"></div>
-            <div><label for="csLink">Reference link (receipt/screenshot — optional)</label><input type="text" id="csLink" placeholder="https://..."></div>
+            <div><label for="csParty">Paid by / Paid to</label><input type="text" id="csParty" autocomplete="off" placeholder="Resident / vendor name"></div>
+            <div><label for="csLink">Reference link (receipt/screenshot — optional)</label><input type="text" id="csLink" autocomplete="off" placeholder="https://..."></div>
           </div>
           <div>
             <label for="csPhoto">Photo (optional) — stored in Google Drive</label>
@@ -1099,9 +1162,15 @@
             </div>
           </div>
           <div id="cashCustomFields"></div>
-          <div class="submit-row"><button type="submit" class="btn btn-primary">Add cash entry</button></div>
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary" id="csSubmitBtn">Add cash entry</button>
+            <button type="button" class="btn btn-ghost" id="csCancelEditBtn" style="display:none;" onclick="resetCashForm()">Cancel edit</button>
+          </div>
         </form>
         <div id="cashAdminList" style="margin-top:14px;"></div>
+        <div class="submit-row" style="margin-top:10px;">
+          <button type="button" class="btn btn-ghost btn-small" onclick="downloadCashCSV()">Download cash tracker (CSV)</button>
+        </div>
 
         <details style="margin-top:20px;">
           <summary style="cursor:pointer; font-size:13.5px; font-weight:600;">⚙️ Manage cash tracker columns</summary>
@@ -1870,6 +1939,63 @@
     return String(str == null ? '' : str).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }
 
+  // --- Generic CSV export helper (used by Assets, Cash, and Events admin tabs) ---
+  function exportRowsToCSV(headers, rows, filename){
+    if (!rows || rows.length === 0){
+      alert('Nothing to export yet.');
+      return;
+    }
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadAssetsCSV(){
+    const headers = ['Name', 'Category', 'Qty', 'Cost (INR)', 'Event', 'Purchase Date', 'Custodian', 'Location', 'Condition', 'Handover Status', 'Remarks', 'Link', 'Photo URL'];
+    const rows = cachedAssets.map(({entry}) => [
+      entry.name, entry.category, entry.qty, entry.cost, entry.event, entry.date,
+      entry.custodian, entry.location, entry.condition, entry.handover, entry.remarks,
+      entry.link || '', entry.photoUrl || ''
+    ]);
+    exportRowsToCSV(headers, rows, 'oncloud33-assets.csv');
+  }
+
+  function downloadCashCSV(){
+    const headers = ['Type', 'Date', 'Description', 'Amount (INR)', 'Payment Mode', 'Paid By/To', 'Link', 'Photo URL'];
+    const rows = cachedCash.map(({entry}) => [
+      entry.type, entry.date, entry.desc, entry.amount, entry.mode, entry.party,
+      entry.link || '', entry.photoUrl || ''
+    ]);
+    exportRowsToCSV(headers, rows, 'oncloud33-cash-tracker.csv');
+  }
+
+  function downloadUpcomingEventsCSV(){
+    const headers = ['Title', 'Date/Schedule', 'Description', 'Info Link'];
+    const rows = cachedUpcomingEvents.map(({entry}) => [
+      entry.title, entry.meta, entry.desc, entry.link || ''
+    ]);
+    exportRowsToCSV(headers, rows, 'oncloud33-upcoming-events.csv');
+  }
+
+  function downloadPastEventsCSV(){
+    const headers = ['Title', 'Date', 'Description', 'Links', 'Audit Report URL'];
+    const rows = cachedPastEvents.map(({entry}) => [
+      entry.title, entry.meta, entry.desc,
+      (entry.links || []).map(l => `${l.label}: ${l.url}`).join(' | '),
+      entry.auditUrl || ''
+    ]);
+    exportRowsToCSV(headers, rows, 'oncloud33-past-events.csv');
+  }
+
   // --- Upcoming / Past events (admin-managed, shared storage) ---
   const upcomingEventForm = document.getElementById('upcomingEventForm');
   const pastEventForm = document.getElementById('pastEventForm');
@@ -1997,6 +2123,7 @@
     const key = editingUpcomingKey || ('upcomingEvent:' + Date.now() + '-' + Math.random().toString(36).slice(2,8));
     await window.storage.set(key, JSON.stringify(entry), true);
     await logToSheet(editingUpcomingKey ? 'Upcoming event updated' : 'Upcoming event added', entry.title);
+    await notifySubscribers('update', `📅 Upcoming event ${editingUpcomingKey ? 'updated' : 'added'}: ${entry.title}`, entry.desc);
     resetUpcomingEventForm();
     await loadUpcomingEvents();
   });
@@ -2045,6 +2172,7 @@
     const key = editingPastKey || ('pastEvent:' + Date.now() + '-' + Math.random().toString(36).slice(2,8));
     await window.storage.set(key, JSON.stringify(entry), true);
     await logToSheet(editingPastKey ? 'Past event updated' : 'Past event added', entry.title);
+    await notifySubscribers('update', `🎉 Past event ${editingPastKey ? 'updated' : 'added'}: ${entry.title}`, entry.desc);
     resetPastEventForm();
     await loadPastEvents();
   });
@@ -2398,6 +2526,57 @@
 
   // --- Inventory: Assets ---
   const assetForm = document.getElementById('assetForm');
+  const asSelect = document.getElementById('asSelect');
+  let editingAssetKey = null;
+
+  function resetAssetForm(){
+    editingAssetKey = null;
+    asSelect.value = '';
+    assetForm.reset();
+    clearAssetPhoto();
+    document.getElementById('asSubmitBtn').textContent = 'Add asset';
+    document.getElementById('asCancelEditBtn').style.display = 'none';
+  }
+
+  asSelect.addEventListener('change', function(){
+    const key = asSelect.value;
+    if (!key){ resetAssetForm(); return; }
+    const match = cachedAssets.find(item => item.key === key);
+    if (!match) return;
+    editingAssetKey = key;
+    const entry = match.entry;
+    document.getElementById('asName').value = entry.name || '';
+    document.getElementById('asCategory').value = entry.category || '';
+    document.getElementById('asQty').value = entry.qty || '';
+    document.getElementById('asCost').value = entry.cost || '';
+    document.getElementById('asEvent').value = entry.event || '';
+    document.getElementById('asDate').value = entry.date || '';
+    document.getElementById('asCustodian').value = entry.custodian || '';
+    document.getElementById('asLocation').value = entry.location || '';
+    document.getElementById('asCondition').value = entry.condition || '';
+    document.getElementById('asHandover').value = entry.handover || 'Pending';
+    document.getElementById('asRemarks').value = entry.remarks || '';
+    document.getElementById('asLink').value = entry.link || '';
+    assetCustomColumns.forEach(col => {
+      const el = document.getElementById('ascf_' + col.id);
+      if (el) el.value = (entry.custom && entry.custom[col.id]) || '';
+    });
+    // Preserve any existing photo unless the admin explicitly picks a new one
+    pendingAssetPhoto = (entry.photoThumbnail || entry.photoUrl)
+      ? { thumbnailUrl: entry.photoThumbnail, viewUrl: entry.photoUrl }
+      : null;
+    const previewWrap = document.getElementById('asPhotoPreviewWrap');
+    if (pendingAssetPhoto){
+      document.getElementById('asPhotoPreview').src = entry.photoThumbnail || entry.photoUrl;
+      document.getElementById('asPhotoStatus').textContent = 'Existing photo (choose a new file to replace)';
+      previewWrap.style.display = 'flex';
+    } else {
+      previewWrap.style.display = 'none';
+    }
+    document.getElementById('asSubmitBtn').textContent = 'Update asset';
+    document.getElementById('asCancelEditBtn').style.display = 'inline-block';
+  });
+
   assetForm.addEventListener('submit', async function(e){
     e.preventDefault();
     const entry = {
@@ -2416,18 +2595,20 @@
       photoThumbnail: pendingAssetPhoto ? pendingAssetPhoto.thumbnailUrl : '',
       photoUrl: pendingAssetPhoto ? pendingAssetPhoto.viewUrl : '',
       custom: {},
-      createdAt: new Date().toISOString()
+      createdAt: editingAssetKey
+        ? (cachedAssets.find(i => i.key === editingAssetKey) || {}).entry?.createdAt || new Date().toISOString()
+        : new Date().toISOString()
     };
     assetCustomColumns.forEach(col => {
       const el = document.getElementById('ascf_' + col.id);
       if (el) entry.custom[col.id] = el.value.trim();
     });
     if (!entry.name) return;
-    const key = 'asset:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    const key = editingAssetKey || ('asset:' + Date.now() + '-' + Math.random().toString(36).slice(2,8));
     await window.storage.set(key, JSON.stringify(entry), true);
-    await logToSheet('Asset added', `${entry.name} (Qty: ${entry.qty}, Event: ${entry.event})`);
-    assetForm.reset();
-    clearAssetPhoto();
+    await logToSheet(editingAssetKey ? 'Asset updated' : 'Asset added', `${entry.name} (Qty: ${entry.qty}, Event: ${entry.event})`);
+    await notifySubscribers('update', `🎪 Asset ${editingAssetKey ? 'updated' : 'added'}: ${entry.name}`, `Qty: ${entry.qty}, Event: ${entry.event}`);
+    resetAssetForm();
     await loadAssets();
   });
 
@@ -2454,16 +2635,34 @@
           : `${cachedAssets.length} asset type(s), ${totalQty || cachedAssets.length} item(s) in community storage.`;
       }
 
+      const prevSelection = asSelect.value;
+      asSelect.innerHTML = '<option value="">+ Add new asset</option>';
+      cachedAssets.forEach(({key, entry}) => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `${entry.name} (${entry.event || 'no event'})`;
+        asSelect.appendChild(opt);
+      });
+      if (prevSelection && cachedAssets.some(i => i.key === prevSelection)) asSelect.value = prevSelection;
+
       if (adminList){
         cachedAssets.forEach(({key, entry}) => {
           const row = document.createElement('div');
           row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
           row.innerHTML = `<span>${escAttr(entry.name)} (${escAttr(entry.qty)}) — ${escAttr(entry.event)}</span>`;
+          const btnGroup = document.createElement('div');
+          btnGroup.style = 'display:flex; gap:6px;';
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-ghost btn-small';
+          editBtn.textContent = 'Edit';
+          editBtn.onclick = () => { asSelect.value = key; asSelect.dispatchEvent(new Event('change')); };
           const delBtn = document.createElement('button');
           delBtn.className = 'btn btn-ghost btn-small';
           delBtn.textContent = 'Remove';
-          delBtn.onclick = async () => { await window.storage.delete(key, true); await loadAssets(); };
-          row.appendChild(delBtn);
+          delBtn.onclick = async () => { await window.storage.delete(key, true); if (editingAssetKey === key) resetAssetForm(); await loadAssets(); };
+          btnGroup.appendChild(editBtn);
+          btnGroup.appendChild(delBtn);
+          row.appendChild(btnGroup);
           adminList.appendChild(row);
         });
       }
@@ -2526,6 +2725,51 @@
 
   // --- Inventory: Cash ---
   const cashForm = document.getElementById('cashForm');
+  const csSelect = document.getElementById('csSelect');
+  let editingCashKey = null;
+
+  function resetCashForm(){
+    editingCashKey = null;
+    csSelect.value = '';
+    cashForm.reset();
+    clearCashPhoto();
+    document.getElementById('csSubmitBtn').textContent = 'Add cash entry';
+    document.getElementById('csCancelEditBtn').style.display = 'none';
+  }
+
+  csSelect.addEventListener('change', function(){
+    const key = csSelect.value;
+    if (!key){ resetCashForm(); return; }
+    const match = cachedCash.find(item => item.key === key);
+    if (!match) return;
+    editingCashKey = key;
+    const entry = match.entry;
+    document.getElementById('csType').value = entry.type || 'Inflow';
+    document.getElementById('csDate').value = entry.date || '';
+    document.getElementById('csDesc').value = entry.desc || '';
+    document.getElementById('csAmount').value = entry.amount || '';
+    document.getElementById('csMode').value = entry.mode || '';
+    document.getElementById('csParty').value = entry.party || '';
+    document.getElementById('csLink').value = entry.link || '';
+    cashCustomColumns.forEach(col => {
+      const el = document.getElementById('cscf_' + col.id);
+      if (el) el.value = (entry.custom && entry.custom[col.id]) || '';
+    });
+    pendingCashPhoto = (entry.photoThumbnail || entry.photoUrl)
+      ? { thumbnailUrl: entry.photoThumbnail, viewUrl: entry.photoUrl }
+      : null;
+    const previewWrap = document.getElementById('csPhotoPreviewWrap');
+    if (pendingCashPhoto){
+      document.getElementById('csPhotoPreview').src = entry.photoThumbnail || entry.photoUrl;
+      document.getElementById('csPhotoStatus').textContent = 'Existing photo (choose a new file to replace)';
+      previewWrap.style.display = 'flex';
+    } else {
+      previewWrap.style.display = 'none';
+    }
+    document.getElementById('csSubmitBtn').textContent = 'Update cash entry';
+    document.getElementById('csCancelEditBtn').style.display = 'inline-block';
+  });
+
   cashForm.addEventListener('submit', async function(e){
     e.preventDefault();
     const entry = {
@@ -2539,18 +2783,20 @@
       photoThumbnail: pendingCashPhoto ? pendingCashPhoto.thumbnailUrl : '',
       photoUrl: pendingCashPhoto ? pendingCashPhoto.viewUrl : '',
       custom: {},
-      createdAt: new Date().toISOString()
+      createdAt: editingCashKey
+        ? (cachedCash.find(i => i.key === editingCashKey) || {}).entry?.createdAt || new Date().toISOString()
+        : new Date().toISOString()
     };
     cashCustomColumns.forEach(col => {
       const el = document.getElementById('cscf_' + col.id);
       if (el) entry.custom[col.id] = el.value.trim();
     });
     if (!entry.desc || !entry.amount) return;
-    const key = 'cash:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+    const key = editingCashKey || ('cash:' + Date.now() + '-' + Math.random().toString(36).slice(2,8));
     await window.storage.set(key, JSON.stringify(entry), true);
-    await logToSheet('Cash entry added', `${entry.type}: ${entry.desc} — ₹${entry.amount}`);
-    cashForm.reset();
-    clearCashPhoto();
+    await logToSheet(editingCashKey ? 'Cash entry updated' : 'Cash entry added', `${entry.type}: ${entry.desc} — ₹${entry.amount}`);
+    await notifySubscribers('update', `💰 Cash entry ${editingCashKey ? 'updated' : 'added'}: ${entry.desc}`, `${entry.type} — ₹${entry.amount}`);
+    resetCashForm();
     await loadCash();
   });
 
@@ -2582,16 +2828,34 @@
           : `₹${balance.toLocaleString('en-IN')} available (₹${inflow.toLocaleString('en-IN')} collected, ₹${outflow.toLocaleString('en-IN')} spent).`;
       }
 
+      const prevSelection = csSelect.value;
+      csSelect.innerHTML = '<option value="">+ Add new cash entry</option>';
+      cachedCash.forEach(({key, entry}) => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `${entry.type}: ${entry.desc} (₹${entry.amount})`;
+        csSelect.appendChild(opt);
+      });
+      if (prevSelection && cachedCash.some(i => i.key === prevSelection)) csSelect.value = prevSelection;
+
       if (adminList){
         cachedCash.forEach(({key, entry}) => {
           const row = document.createElement('div');
           row.style = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px;';
           row.innerHTML = `<span>${escAttr(entry.type)}: ${escAttr(entry.desc)} — ₹${escAttr(entry.amount)}</span>`;
+          const btnGroup = document.createElement('div');
+          btnGroup.style = 'display:flex; gap:6px;';
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-ghost btn-small';
+          editBtn.textContent = 'Edit';
+          editBtn.onclick = () => { csSelect.value = key; csSelect.dispatchEvent(new Event('change')); };
           const delBtn = document.createElement('button');
           delBtn.className = 'btn btn-ghost btn-small';
           delBtn.textContent = 'Remove';
-          delBtn.onclick = async () => { await window.storage.delete(key, true); await loadCash(); };
-          row.appendChild(delBtn);
+          delBtn.onclick = async () => { await window.storage.delete(key, true); if (editingCashKey === key) resetCashForm(); await loadCash(); };
+          btnGroup.appendChild(editBtn);
+          btnGroup.appendChild(delBtn);
+          row.appendChild(btnGroup);
           adminList.appendChild(row);
         });
       }
@@ -2901,6 +3165,24 @@ As more towers complete handover and the remaining amenities switch on over the 
 
   // --- Announcements (admin-posted, last 3 shown to all residents) ---
   const announcementForm = document.getElementById('announcementForm');
+  // --- Notify subscribers helper ---
+  // category: 'announcement' (goes to both "announcements" and "all" subscribers)
+  //           'update' (goes to "all" subscribers only — events/inventory/cash changes)
+  async function notifySubscribers(category, subject, message){
+    try {
+      await fetch(STORAGE_WEBAPP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          type: 'notify',
+          category: category,
+          subject: subject,
+          message: message
+        })
+      });
+    } catch (err){ console.error('Could not trigger subscriber notification', err); }
+  }
+
   announcementForm.addEventListener('submit', async function(e){
     e.preventDefault();
     const entry = {
@@ -2913,6 +3195,7 @@ As more towers complete handover and the remaining amenities switch on over the 
     const key = 'announcement:' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
     await window.storage.set(key, JSON.stringify(entry), true);
     await logToSheet('Announcement posted', entry.title);
+    await notifySubscribers('announcement', `📣 New announcement: ${entry.title}`, entry.body);
     announcementForm.reset();
     await loadAnnouncements();
   });
@@ -3170,6 +3453,73 @@ As more towers complete handover and the remaining amenities switch on over the 
     ], 'Tenant/spouse request');
   }
   loadAllGroupSubmissions();
+
+  // --- Subscribe to updates by email ---
+  // Subscriptions are written directly into a "Subscribers" tab in the
+  // Google Sheet via the same Apps Script Web App (type: 'subscribe').
+  // Whenever an admin posts an announcement (or, for "all updates"
+  // subscribers, any tracked change), the Apps Script emails everyone
+  // whose preference matches. See OnCloud33_AppsScript.gs for the mailer.
+
+  function openSubscribeModal(){
+    document.getElementById('subscribeBackdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('subscribeFormView').style.display = 'block';
+    document.getElementById('subscribeSuccessView').style.display = 'none';
+    document.getElementById('subscribeForm').reset();
+  }
+  function closeSubscribeModal(){
+    document.getElementById('subscribeBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('subscribeBackdrop').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('subscribeBackdrop')) closeSubscribeModal();
+  });
+
+  async function submitSubscription(action){
+    const email = document.getElementById('subEmail').value.trim();
+    const name = document.getElementById('subName').value.trim();
+    const preference = document.getElementById('subPreference').value;
+    if (!email){
+      alert('Please enter your email address.');
+      return;
+    }
+    try {
+      await fetch(STORAGE_WEBAPP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          type: 'subscribe',
+          action: action, // 'subscribe' or 'unsubscribe'
+          email: email,
+          name: name,
+          preference: preference
+        })
+      });
+    } catch (err){ console.error('Could not update subscription', err); }
+
+    const titleEl = document.getElementById('subscribeSuccessTitle');
+    const msgEl = document.getElementById('subscribeSuccessMsg');
+    if (action === 'unsubscribe'){
+      titleEl.textContent = 'Unsubscribed';
+      msgEl.textContent = `${email} will no longer receive email updates from this site.`;
+    } else {
+      titleEl.textContent = 'Subscribed!';
+      msgEl.textContent = preference === 'all'
+        ? `${email} will now receive an email for all updates (announcements, events, inventory/funds changes).`
+        : `${email} will now receive an email whenever a new announcement is posted.`;
+    }
+    document.getElementById('subscribeFormView').style.display = 'none';
+    document.getElementById('subscribeSuccessView').style.display = 'block';
+  }
+
+  document.getElementById('subscribeForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    submitSubscription('subscribe');
+  });
+  function submitUnsubscribe(){
+    submitSubscription('unsubscribe');
+  }
 
 </script>
 
