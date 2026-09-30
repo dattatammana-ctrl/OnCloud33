@@ -187,6 +187,14 @@
   }
   .btn:hover{transform:translateY(-1px);}
   .btn-primary{background:var(--indigo); color:var(--cream);}
+  .btn:disabled{opacity:0.65; cursor:not-allowed;}
+  .btn-spinner{
+    display:inline-block; width:12px; height:12px; margin-right:6px;
+    border:2px solid rgba(255,255,255,0.4); border-top-color:#fff;
+    border-radius:50%; vertical-align:middle;
+    animation:btn-spin 0.7s linear infinite;
+  }
+  @keyframes btn-spin{ to{ transform:rotate(360deg); } }
   .btn-primary:hover{box-shadow:0 8px 18px rgba(28,42,69,0.28);}
   .btn-ghost{background:transparent; border-color:var(--ink); color:var(--ink);}
   .btn-disabled{
@@ -1572,7 +1580,7 @@
     if(e.key === 'Escape') closeModal();
   });
 
-  regForm.addEventListener('submit', async function(e){
+  withSubmitLock(regForm, async function(e){
     e.preventDefault();
     const submitBtn = regForm.querySelector('button[type="submit"]');
 
@@ -1717,7 +1725,7 @@
     if (showing) regenerateCaptcha();
   }
 
-  gateForm.addEventListener('submit', async function(e){
+  withSubmitLock(gateForm, async function(e){
     e.preventDefault();
     const enteredName = document.getElementById('adminName').value.trim();
     const entered = document.getElementById('adminPass').value;
@@ -1733,7 +1741,7 @@
     }
   });
 
-  changePassForm.addEventListener('submit', async function(e){
+  withSubmitLock(changePassForm, async function(e){
     e.preventDefault();
     cpError.style.display = 'none';
     cpSuccess.style.display = 'none';
@@ -1771,7 +1779,7 @@
     }
   });
 
-  resetPassForm.addEventListener('submit', async function(e){
+  withSubmitLock(resetPassForm, async function(e){
     e.preventDefault();
     rpError.style.display = 'none';
     rpSuccess.style.display = 'none';
@@ -1939,6 +1947,34 @@
     return String(str == null ? '' : str).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }
 
+  // --- Generic "prevent double-submit" helper for all admin forms ---
+  // Wraps a form's submit handler so the submit button disables itself and
+  // shows a spinner + "Saving..." the moment it's clicked, and only
+  // re-enables once the async work finishes (success or failure) — this
+  // stops accidental double-clicks from creating duplicate entries while a
+  // slow network request is still in flight.
+  function withSubmitLock(form, handler){
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn && btn.disabled) return; // already in-flight, ignore extra clicks/events
+      const originalText = btn ? btn.textContent : '';
+      if (btn){
+        btn.disabled = true;
+        btn.dataset.originalText = originalText;
+        btn.innerHTML = '<span class="btn-spinner"></span> Saving…';
+      }
+      try {
+        await handler(e);
+      } finally {
+        if (btn){
+          btn.disabled = false;
+          btn.textContent = btn.dataset.originalText || originalText;
+        }
+      }
+    });
+  }
+
   // --- Generic CSV export helper (used by Assets, Cash, and Events admin tabs) ---
   function exportRowsToCSV(headers, rows, filename){
     if (!rows || rows.length === 0){
@@ -2090,7 +2126,7 @@
     return match ? match.key : null;
   }
 
-  upcomingEventForm.addEventListener('submit', async function(e){
+  withSubmitLock(upcomingEventForm, async function(e){
     e.preventDefault();
     const title = document.getElementById('ueTitle').value.trim();
 
@@ -2128,7 +2164,7 @@
     await loadUpcomingEvents();
   });
 
-  pastEventForm.addEventListener('submit', async function(e){
+  withSubmitLock(pastEventForm, async function(e){
     e.preventDefault();
     const title = document.getElementById('peTitle').value.trim();
 
@@ -2360,7 +2396,7 @@
   }
 
   const assetColumnForm = document.getElementById('assetColumnForm');
-  assetColumnForm.addEventListener('submit', async function(e){
+  withSubmitLock(assetColumnForm, async function(e){
     e.preventDefault();
     const nameInput = document.getElementById('assetColumnName');
     const label = nameInput.value.trim();
@@ -2372,7 +2408,7 @@
   });
 
   const cashColumnForm = document.getElementById('cashColumnForm');
-  cashColumnForm.addEventListener('submit', async function(e){
+  withSubmitLock(cashColumnForm, async function(e){
     e.preventDefault();
     const nameInput = document.getElementById('cashColumnName');
     const label = nameInput.value.trim();
@@ -2577,7 +2613,7 @@
     document.getElementById('asCancelEditBtn').style.display = 'inline-block';
   });
 
-  assetForm.addEventListener('submit', async function(e){
+  withSubmitLock(assetForm, async function(e){
     e.preventDefault();
     const entry = {
       name: document.getElementById('asName').value.trim(),
@@ -2770,7 +2806,7 @@
     document.getElementById('csCancelEditBtn').style.display = 'inline-block';
   });
 
-  cashForm.addEventListener('submit', async function(e){
+  withSubmitLock(cashForm, async function(e){
     e.preventDefault();
     const entry = {
       type: document.getElementById('csType').value,
@@ -2925,7 +2961,7 @@
 
   // --- Holding account details ---
   const accountForm = document.getElementById('accountForm');
-  accountForm.addEventListener('submit', async function(e){
+  withSubmitLock(accountForm, async function(e){
     e.preventDefault();
     const entry = {
       bank: document.getElementById('acBank').value.trim(),
@@ -2968,7 +3004,7 @@
 
   // --- Custom sections (publish anywhere, top or bottom, no code changes) ---
   const customSectionForm = document.getElementById('customSectionForm');
-  customSectionForm.addEventListener('submit', async function(e){
+  withSubmitLock(customSectionForm, async function(e){
     e.preventDefault();
     const linksRaw = document.getElementById('csecLinks').value.trim();
     const links = linksRaw ? linksRaw.split(',').map(pair => {
@@ -3134,7 +3170,7 @@ As more towers complete handover and the remaining amenities switch on over the 
   }
 
   const storyForm = document.getElementById('storyForm');
-  storyForm.addEventListener('submit', async function(e){
+  withSubmitLock(storyForm, async function(e){
     e.preventDefault();
     const entry = {
       title: document.getElementById('stTitle').value.trim() || DEFAULT_STORY_TITLE,
@@ -3183,7 +3219,7 @@ As more towers complete handover and the remaining amenities switch on over the 
     } catch (err){ console.error('Could not trigger subscriber notification', err); }
   }
 
-  announcementForm.addEventListener('submit', async function(e){
+  withSubmitLock(announcementForm, async function(e){
     e.preventDefault();
     const entry = {
       title: document.getElementById('anTitle').value.trim(),
@@ -3301,7 +3337,7 @@ As more towers complete handover and the remaining amenities switch on over the 
     if (e.target === document.getElementById('tenantModalBackdrop')) closeTenantModal();
   });
 
-  document.getElementById('ownersForm').addEventListener('submit', async function(e){
+  withSubmitLock(document.getElementById('ownersForm'), async function(e){
     e.preventDefault();
     const entry = {
       name: document.getElementById('ownName').value.trim(),
@@ -3317,7 +3353,7 @@ As more towers complete handover and the remaining amenities switch on over the 
     document.getElementById('ownersSuccessView').style.display = 'block';
   });
 
-  document.getElementById('volunteerForm').addEventListener('submit', async function(e){
+  withSubmitLock(document.getElementById('volunteerForm'), async function(e){
     e.preventDefault();
     const entry = {
       name: document.getElementById('volName').value.trim(),
@@ -3334,7 +3370,7 @@ As more towers complete handover and the remaining amenities switch on over the 
     document.getElementById('volunteerSuccessView').style.display = 'block';
   });
 
-  document.getElementById('tenantForm').addEventListener('submit', async function(e){
+  withSubmitLock(document.getElementById('tenantForm'), async function(e){
     e.preventDefault();
     const entry = {
       name: document.getElementById('tenName').value.trim(),
@@ -3513,12 +3549,16 @@ As more towers complete handover and the remaining amenities switch on over the 
     document.getElementById('subscribeSuccessView').style.display = 'block';
   }
 
-  document.getElementById('subscribeForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    submitSubscription('subscribe');
+  withSubmitLock(document.getElementById('subscribeForm'), async function(e){
+    await submitSubscription('subscribe');
   });
-  function submitUnsubscribe(){
-    submitSubscription('unsubscribe');
+  async function submitUnsubscribe(){
+    const btn = document.querySelector('#subscribeForm button[type="button"]');
+    if (btn){ if (btn.disabled) return; btn.disabled = true; const orig = btn.textContent; btn.innerHTML = '<span class="btn-spinner"></span> Working…';
+      try { await submitSubscription('unsubscribe'); } finally { btn.disabled = false; btn.textContent = orig; }
+    } else {
+      await submitSubscription('unsubscribe');
+    }
   }
 
 </script>
